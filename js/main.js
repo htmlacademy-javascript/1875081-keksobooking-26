@@ -1,26 +1,4 @@
-// Общее задание.
-// Решение нашла на https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-
-// function getRandomInt(min, max) {
-//   return getRandomFloat(min, max, 0);
-// }
-
-// getRandomInt(0, 4);
-
-// Задание по Кексобукингу
-
-// function getRandomFloat(min, max, digits) {
-//   if (min >= max || min < 0 || max <= 0) {
-//     return null;
-//   }
-
-//   return parseFloat((Math.random() * (max - min + 1) + min).toFixed(digits));
-// }
-
-// getRandomFloat(0, 4, 6);
-
-// ВЫШЕ МОЕ РЕШЕНИЕ, СНИЗУ АКАДЕМОВСКОЕ. АКАДЕМОВСКИЙ ВАРИАНТ, СУДЯ ПО ВСЕМУ, ЛУЧШЕ МОЕГО.
-
+// Функции для вызова рандомного целого числа
 function getRandomInt (a, b) {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
@@ -29,8 +7,7 @@ function getRandomInt (a, b) {
   return Math.floor(result);
 }
 
-getRandomInt(0,4);
-
+// Функция для вызова рандомного числа с плавающей точкой
 function getRandomFloat (a, b, digits = 1) {
   const lower = Math.min(Math.abs(a), Math.abs(b));
   const upper = Math.max(Math.abs(a), Math.abs(b));
@@ -39,80 +16,79 @@ function getRandomFloat (a, b, digits = 1) {
   return +result.toFixed(digits);
 }
 
-getRandomFloat(0,4);
-
-// ЗАДАНИЕ 4 РАЗДЕЛА
-
-const avatarNumbers = [
-  1,
-  2,
-  3,
-  4,
-  5,
-  6,
-  7,
-  8,
-  9,
-  10
-];
-
-const quantityNumbers = getRandomInt(0, avatarNumbers.length - 1);
-// В условии аватары не должны повторяться, я не уверена, что рандомное число - это то, что нужно, потому что в таком случае число может повторится несколько раз.
-const number = avatarNumbers[quantityNumbers] > 9 ? avatarNumbers[quantityNumbers] : `0${avatarNumbers[quantityNumbers]}`;
-
-/* function numberCall (number) {
-  for (let i = 0; i < number.length; i++) {
-    if (number[i] > 9) {
-      return number[i];
-    }
-    return `0${number[i]}`;
-  }
+// Функция для вызова рандомного элемента из массива
+function getRandomElementFromArray(element) {
+  return element[getRandomInt(0, element.length - 1)];
 }
 
-Еще такой вариант пробовала, но при таком варианте при вызове numberCall(avatarNumbers) всегда число 01 в url.
-*/
+// Функция для вызова рандомного количества элементов из массива
 
-// Аватар автора
-const AUTHOR = {
-  avatar: `img/avatars/user${number}.png`
+function getRandomElementsFromArray (elements) {
+  const elementsLength = getRandomInt(1, elements.length);
+  const arrayRandomElements = [];
+
+  while (arrayRandomElements.length <= elementsLength) {
+    const randomElements = elements[getRandomInt(0, elements.length - 1)];
+
+    if (!arrayRandomElements.includes(randomElements)) {
+      arrayRandomElements.push(randomElements);
+    }
+  }
+  return arrayRandomElements;
+}
+
+// КОНСТАНТЫ
+const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
+const TIMES = ['12:00', '13:00', '14:00'];
+const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+const PHOTOS = [
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
+  'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
+];
+const Coords = {
+  LAT_MIN: 35.65000,
+  LAT_MAX: 35.70000,
+  LNG_MIN: 139.70000,
+  LNG_MAX: 139.80000
 };
 
-// Информация об объявлении
-const OFFER = {
-  title: 'Лучшее место для путешествий по России',
-  adress: 'LOCATION.lat, LOCATION.lng',
-  price: getRandomInt(500, 1000),
-  type: 'palace, flat, house, bungalow, hotel',
-  rooms: getRandomInt(1, 5),
-  guest: getRandomInt(1,10),
-  checkin: '12:00, 13:00, 14:00',
-  checkout: '12:00, 13:00, 14:00',
-  features: [
-    'wifi',
-    'dishwasher',
-    'parking',
-    'washer',
-    'elevator',
-    'conditioner'
-  ],
-  description: 'Обслуживание лучше, чем в царских хоромах',
-  photos: [
-    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
-    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
-    'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
-  ]
+/**
+ * Функция для генерации объявления
+ * @param {integer} index — индекс изображения, который будем передавать при генерации списка объявлений
+ * @return {Object} — готовый объект объявления
+ */
+
+const createAd = (index) => {
+  const location = {
+    lat: getRandomFloat(Coords.LAT_MIN, Coords.LAT_MAX),
+    lng: getRandomFloat(Coords.LNG_MIN, Coords.LNG_MAX),
+  };
+  return {
+    author: {
+      avatar: `img/avatars/user${String(index).padStart(2, '0')}.png`
+    },
+    offer: {
+      title: 'Лучшее место для путешествий по России',
+      address: 'LOCATION.lat, LOCATION.lng',
+      price: getRandomInt(500, 1000),
+      type: getRandomElementFromArray(TYPES),
+      rooms: getRandomInt(1, 5),
+      guest: getRandomInt(1,10),
+      checkin: getRandomElementFromArray(TIMES),
+      checkout: getRandomElementFromArray(TIMES),
+      features: getRandomElementsFromArray(FEATURES),
+      description: 'Обслуживание лучше, чем в царских хоромах',
+      photos: getRandomElementsFromArray(PHOTOS)
+    },
+    location
+  };
 };
 
-// Местоположение в виде географических координат
+/**
+ * Генерация объявлений
+ * @param {integer} count — количество объявлений, которое хотим сгенерировать
+ * @return {Array} — массив сгенерированных объявлений
+ */
 
-const LOCATION = {
-  lat: getRandomFloat(35.65000, 35.70000),
-  lng: getRandomFloat(139.70000, 139.80000),
-};
-
-const createAds = (function () {
-  return Object.assign({}, AUTHOR, OFFER, LOCATION);
-});
-
-const adsNear = Array.from({length: 10}, createAds);
-console.log(adsNear);
+const createAds = (count) => Array.from({length:count}, (x, i) => createAd(i));
