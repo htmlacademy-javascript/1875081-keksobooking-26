@@ -109,4 +109,4 @@ const createAd = (index) => {
  * @return {Array} — массив сгенерированных объявлений
  */
 const createAds = (count) => Array.from({length:count}, (_, i) => createAd(i + 1));
-console.log(createAds(COUNT_ADS));
+createAds(COUNT_ADS);
