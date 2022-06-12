@@ -56,4 +56,4 @@ const createAd = (index) => {
 const createAds = () => Array.from({length: COUNT_ADS}, (_, i) => createAd(i + 1));
 createAds();
 
-export {createAds};
+export {FEATURES, PHOTOS, createAds};
