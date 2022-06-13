@@ -43,23 +43,20 @@ generateCards.forEach(({author, offer}) => {
   cardElement.querySelector('.popup__text--address').textContent = offer.address;
   // Как задать адресс словами, а не координатами?
   cardElement.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-  const cardType = cardElement.querySelector('.popup__type');
-  switch(offer.type) {
-    case 'palace':
-      cardType.textContent = 'Дворец';
-      break;
-    case 'flat':
-      cardType.textContent = 'Квартира';
-      break;
-    case 'house':
-      cardType.textContent = 'Дом';
-      break;
-    case 'bungalow':
-      cardType.textContent = 'Бунгало';
-      break;
-    case 'hotel':
-      cardType.textContent = 'Отель';
-      break;
+  cardElement.querySelector('.popup__type').textContent = getCardType(offer.type);
+  function getCardType (type) {
+    switch(type) {
+      case 'palace':
+        return 'Дворец';
+      case 'flat':
+        return 'Квартира';
+      case 'house':
+        return 'Дом';
+      case 'bungalow':
+        return 'Бунгало';
+      case 'hotel':
+        return 'Отель';
+    }
   }
   cardElement.querySelector('.popup__text--capacity').textContent = `${offer.rooms} комнаты для ${offer.guest} гостей`;
   cardElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
