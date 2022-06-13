@@ -72,3 +72,5 @@ generateCards.forEach(({author, offer}) => {
 });
 
 mapCanvas.append(generateCardFragment);
+
+export {mapCanvas};
