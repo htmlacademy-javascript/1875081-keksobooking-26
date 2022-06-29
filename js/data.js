@@ -17,6 +17,16 @@ const Coords = {
 };
 const COUNT_ADS = 10;
 
+const RoomsAmount = {
+  MIN_ROOMS: 1,
+  MAX_ROOMS: 5
+};
+
+const GuestsAmount = {
+  MIN_GUEST: 1,
+  MAX_GUESTS: 10
+};
+
 /**
  * Функция для генерации объявления
  * @param {integer} index — индекс изображения, который будем передавать при генерации списка объявлений
@@ -36,8 +46,8 @@ const createAd = (index) => {
       address: `${location.lat}, ${location.lng}`,
       price: getRandomInt(500, 1000),
       type: getRandomElementFromArray(TYPES),
-      rooms: getRandomInt(1, 5),
-      guest: getRandomInt(1,10),
+      rooms: getRandomInt(RoomsAmount.MIN_ROOMS, RoomsAmount.MAX_ROOMS),
+      guest: getRandomInt(GuestsAmount.MIN_GUEST, GuestsAmount.MAX_GUESTS),
       checkin: getRandomElementFromArray(TIMES),
       checkout: getRandomElementFromArray(TIMES),
       features: getRandomElementsFromArray(FEATURES),
