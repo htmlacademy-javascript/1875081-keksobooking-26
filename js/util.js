@@ -40,10 +40,44 @@ function getRandomElementsFromArray (elements) {
 // Функция для удаления елемента
 function deleteElement (data, element) {
   if (data) {
-    return (element.textContent = data);
+    element.textContent = data;
   } else {
-    return element.remove();
+    element.remove();
   }
 }
 
-export {getRandomInt, getRandomFloat, getRandomElementFromArray, getRandomElementsFromArray, deleteElement};
+// Функция для генерации правильного окончания в сообщении.
+// Как ее сделать красивее и проще?
+function createCapacityMessage (tag, rooms, guest) {
+  if (rooms === 1 && guest === 1) {
+    tag.textContent = `${rooms} комната для ${guest} гостя`;
+  } else if (rooms === 1 && guest === 2) {
+    tag.textContent = `${rooms} комната для ${guest} гостей`;
+  } else if (rooms >=2 && rooms <=4 && guest === 1) {
+    tag.textContent = `${rooms} комнаты для ${guest} гостя`;
+  } else if (rooms >=2 && rooms <=4  && guest >= 2) {
+    tag.textContent = `${rooms} комнаты для ${guest} гостей`;
+  } else if (rooms >=5  && guest === 1) {
+    tag.textContent = `${rooms} комнат для ${guest} гостя`;
+  } else if (rooms >=5  && guest >= 2) {
+    tag.textContent = `${rooms} комнат для ${guest} гостей`;
+  }
+}
+
+const ChangeWord = {
+  palace: 'дворца',
+  flat: 'квартиры',
+  house: 'дома',
+  bungalow: 'бунгало',
+  hotel: 'отеля'
+};
+
+export {
+  getRandomInt,
+  getRandomFloat,
+  getRandomElementFromArray,
+  getRandomElementsFromArray,
+  deleteElement,
+  createCapacityMessage,
+  ChangeWord
+};
