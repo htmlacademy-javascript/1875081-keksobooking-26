@@ -1,32 +1,17 @@
 import { adForm } from './form-activate.js';
 import { ChangeWord } from './util.js';
 
-const pristine = new Pristine(adForm, {
-  classTo: 'ad-form__element',
-  errorTextParent: 'ad-form__element',
-  errorTextClass: 'ad-form__error-text',
-});
-
-// Вадидация заголовка
 const title = adForm.querySelector('#title');
+const type = adForm.querySelector('#type');
+const priceInput = adForm.querySelector('#price');
+const rooms = adForm.querySelector('#room_number');
+const capacity = adForm.querySelector('#capacity');
+const timeIn = adForm.querySelector('#timein');
+const timeOut = adForm.querySelector('#timeout');
 const TitleSymbols = {
   MIN_SYMBOLS: 30,
   MAX_SYMBOLS: 100
 };
-function validateTitle (value) {
-  return value.length >= TitleSymbols.MIN_SYMBOLS && value.length <= TitleSymbols.MAX_SYMBOLS;
-}
-
-function errorTitle () {
-  return `Введите от ${TitleSymbols.MIN_SYMBOLS} до ${TitleSymbols.MAX_SYMBOLS} символов`;
-}
-
-pristine.addValidator(title, validateTitle, errorTitle);
-
-// Валидация типа жилья и его цены
-const type = adForm.querySelector('#type');
-const price = adForm.querySelector('#price');
-
 const PriceAmount = {
   MIN_PRICE: {
     palace: 10000,
@@ -43,26 +28,6 @@ const PriceAmount = {
     hotel: 100000
   }
 };
-
-type.addEventListener('change', () => {
-  price.placeholder = PriceAmount.MIN_PRICE[type.value];
-  price.min = PriceAmount.MIN_PRICE[type.value];
-  price.value = '';
-});
-
-function validatePrice (value) {
-  return value <= PriceAmount.MAX_PRICE[type.value] && value >= PriceAmount.MIN_PRICE[type.value];
-}
-
-function errorPrice () {
-  return (price.value > PriceAmount.MAX_PRICE[type.value]) ? `Стоимость ${ChangeWord[type.value]} не более ${PriceAmount.MAX_PRICE[type.value]}р` : `Стоимость ${ChangeWord[type.value]} не меньше ${PriceAmount.MIN_PRICE[type.value]}р`;
-}
-
-pristine.addValidator(price,validatePrice, errorPrice);
-
-// Валидация количества комнат и гостей
-// Я без понятия как написать
-const capacity = adForm.querySelector('#capacity');
 const maxCapacity = {
   '1': [1],
   '2': [1, 2],
@@ -70,21 +35,55 @@ const maxCapacity = {
   '100': [0]
 };
 
-function validateCapacity (value) {
-  maxCapacity[value] = value;
-  // Сроку выше написада что-бы линтер ошибку не выбивал
+// Весь код снизу нужно завернуть в функцию? Что-бы импортировать потом в main. Или как-то иначе?
+const pristine = new Pristine(adForm, {
+  classTo: 'ad-form__element',
+  errorTextParent: 'ad-form__element',
+  errorTextClass: 'ad-form__error-text',
+});
+
+// Валидация заголовка
+function validateTitle (value) {
+  return value.length >= TitleSymbols.MIN_SYMBOLS && value.length <= TitleSymbols.MAX_SYMBOLS;
+}
+
+function errorTitle () {
+  return `Введите от ${TitleSymbols.MIN_SYMBOLS} до ${TitleSymbols.MAX_SYMBOLS} символов`;
+}
+
+pristine.addValidator(title, validateTitle, errorTitle);
+
+// Валидация типа жилья и его цены
+type.addEventListener('change', () => {
+  priceInput.placeholder = PriceAmount.MIN_PRICE[type.value];
+  priceInput.min = PriceAmount.MIN_PRICE[type.value];
+  priceInput.value = '';
+});
+
+function validatePrice (value) {
+  return value <= PriceAmount.MAX_PRICE[type.value] && value >= PriceAmount.MIN_PRICE[type.value];
+}
+
+function errorPrice () {
+  return (priceInput.value > PriceAmount.MAX_PRICE[type.value])
+    ? `Стоимость ${ChangeWord[type.value]} не более ${PriceAmount.MAX_PRICE[type.value]}р`
+    : `Стоимость ${ChangeWord[type.value]} не меньше ${PriceAmount.MIN_PRICE[type.value]}р`;
+}
+
+pristine.addValidator(priceInput,validatePrice, errorPrice);
+
+// Валидация количества комнат и гостей
+function validateCapacity () {
+  return maxCapacity[+rooms.value].includes(+capacity.value);
 }
 
 function errorCapacity() {
-  return 'error capacity';
+  return 'Количество мест не соответствует типу жилья';
 }
 
 pristine.addValidator(capacity, validateCapacity, errorCapacity);
 
 // Время заезда и время выезда синхрон
-const timeIn = adForm.querySelector('#timein');
-const timeOut = adForm.querySelector('#timeout');
-
 timeIn.addEventListener('change', () => {
   timeOut.value = timeIn.value;
   pristine.validate();

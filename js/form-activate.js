@@ -3,7 +3,7 @@ const adFormElements = adForm.children;
 const mapFilters = document.querySelector('.map__filters');
 const mapFiltersElements = mapFilters.children;
 
-const activeForm = (isActiveForm) => {
+const activateForm = (isActiveForm) => {
   if (isActiveForm) {
     adForm.classList.remove('ad-form--disabled');
     for (const element of adFormElements) {
@@ -25,6 +25,6 @@ const activeForm = (isActiveForm) => {
   }
 };
 
-export {adForm, activeForm};
+export {adForm, activateForm};
 
 

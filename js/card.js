@@ -10,7 +10,7 @@ const types = {
   hotel: 'Отель'
 };
 
-function createCard (card) {
+function showCard (card) {
   const cardElement = cardTemplate.cloneNode(true);
 
   const cardAvatar = cardElement.querySelector('.popup__avatar');
@@ -63,4 +63,4 @@ function createCard (card) {
   mapCanvas.append(cardElement);
 }
 
-export {createCard, types};
+export {showCard, types};

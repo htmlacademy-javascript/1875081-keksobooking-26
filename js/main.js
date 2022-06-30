@@ -1,7 +1,7 @@
 import { createAds } from './data.js';
-import {createCard} from './generate-card.js';
-import {activeForm} from './form-activate.js';
+import {showCard} from './card.js';
+import {activateForm} from './form-activate.js';
 import './form-validate.js';
-activeForm(true);
+activateForm(true);
 const generateCards = createAds();
-createCard(generateCards[0]);
+showCard(generateCards[0]);
