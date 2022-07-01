@@ -4,6 +4,7 @@ import { ChangeWord } from './util.js';
 const title = adForm.querySelector('#title');
 const type = adForm.querySelector('#type');
 const priceInput = adForm.querySelector('#price');
+const sliderElement = adForm.querySelector('.ad-form__slider');
 const rooms = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const timeIn = adForm.querySelector('#timein');
@@ -29,10 +30,10 @@ const PriceAmount = {
   }
 };
 const maxCapacity = {
-  '1': [1],
-  '2': [1, 2],
-  '3': [1, 2, 3],
-  '100': [0]
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0]
 };
 
 // Весь код снизу нужно завернуть в функцию? Что-бы импортировать потом в main. Или как-то иначе?
@@ -54,12 +55,6 @@ function errorTitle () {
 pristine.addValidator(title, validateTitle, errorTitle);
 
 // Валидация типа жилья и его цены
-type.addEventListener('change', () => {
-  priceInput.placeholder = PriceAmount.MIN_PRICE[type.value];
-  priceInput.min = PriceAmount.MIN_PRICE[type.value];
-  priceInput.value = '';
-});
-
 function validatePrice (value) {
   return value <= PriceAmount.MAX_PRICE[type.value] && value >= PriceAmount.MIN_PRICE[type.value];
 }
@@ -71,6 +66,36 @@ function errorPrice () {
 }
 
 pristine.addValidator(priceInput,validatePrice, errorPrice);
+
+// noUiSlider
+noUiSlider.create(sliderElement, {
+  range: {
+    min: Number(priceInput.min),
+    max: Number(priceInput.max),
+  },
+  start: Number(priceInput.min),
+  step: 15,
+  connect: 'lower'
+});
+priceInput.min = PriceAmount.MIN_PRICE[type.value];
+
+sliderElement.noUiSlider.on('update', () => {
+  const sliderValue = Number(sliderElement.noUiSlider.get());
+  if (sliderValue === 0) {
+    priceInput.value = '';
+  }
+  priceInput.value = sliderValue;
+  pristine.validate(priceInput);
+});
+
+priceInput.addEventListener('change', (evt) => {
+  sliderElement.noUiSlider.set(Number(evt.target.value));
+});
+
+type.addEventListener('change', () => {
+  priceInput.placeholder = PriceAmount.MIN_PRICE[type.value];
+  priceInput.min = PriceAmount.MIN_PRICE[type.value];
+});
 
 // Валидация количества комнат и гостей
 function validateCapacity () {
@@ -107,5 +132,9 @@ pristine.addValidator(timeOut, validateTime, errorTime);
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
+});
+
+adForm.addEventListener('reset', () => {
+  pristine.reset();
 });
 

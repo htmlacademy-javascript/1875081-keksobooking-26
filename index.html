@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="nouislider/nouislider.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
 </head>
@@ -88,11 +89,11 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="title">Заголовок объявления</label>
-          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" data-pristine-minlength="30" data-pristine-minlength="100" required>
+          <input id="title" name="title" type="text" placeholder="Милая, уютная квартирка в центре Токио" data-pristine-minlength="30" data-pristine-minlength="100" data-pristine-required-message="Обязательное поле" required>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text" readonly>
+          <input id="address" name="address" type="text" data-pristine-required-message="Обязательное поле" readonly required>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -106,7 +107,7 @@
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="price">Цена за ночь, руб.</label>
-          <input id="price" name="price" type="number" placeholder="5000" data-pristine-min="0" data-pristine-max="100000" required>
+          <input id="price" name="price" type="number" placeholder="5000" min="0" max="100000" data-pristine-required-message="Обязательное поле" required>
           <div class="ad-form__slider">
           </div>
         </fieldset>
@@ -216,6 +217,14 @@
     </article>
   </template>
 
+  <!-- Балун для меток -->
+  <template id="balloon">
+    <section class="balloon">
+      <h4 class="balloon__title">Заголовок балуна</h4>
+      <p class="balloon__lat-lng">Координаты: 12.34567, 98.76543</p>
+    </section>
+  </template>
+
   <!-- Сообщение об успешном создании объявления -->
   <template id="success">
     <div class="success">
@@ -233,6 +242,9 @@
 
   <script src="nouislider/nouislider.js"></script>
   <script src="pristine/pristine.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
   <script src="./js/main.js" type="module"></script>
 </body>
 </html>

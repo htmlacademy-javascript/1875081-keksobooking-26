@@ -63,4 +63,4 @@ function showCard (card) {
   mapCanvas.append(cardElement);
 }
 
-export {showCard, types};
+export {showCard};

@@ -64,6 +64,5 @@ const createAd = (index) => {
  * @return {Array} — массив сгенерированных объявлений
  */
 const createAds = () => Array.from({length: COUNT_ADS}, (_, i) => createAd(i + 1));
-createAds();
 
 export {FEATURES, PHOTOS, createAds};
