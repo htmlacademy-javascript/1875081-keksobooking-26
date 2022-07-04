@@ -1,4 +1,4 @@
-import { createAds } from './data.js';
+import { createAds, COUNT_ADS } from './data.js';
 import { activateForm } from './form-activate.js';
 
 const resetButton = document.querySelector('.ad-form__reset');
@@ -24,7 +24,7 @@ const AD_PIN_ICON = L.icon({
   iconAnchor: [20, 40],
 });
 
-const generateCards = createAds();
+const generateCards = createAds(COUNT_ADS);
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -96,3 +96,5 @@ resetButton.addEventListener('click', () => {
     ZOOM_DEFAULT
   );
 });
+
+export {generateCards};
