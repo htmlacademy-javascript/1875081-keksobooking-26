@@ -1,7 +1,5 @@
 import { adForm } from './form-activate.js';
-import { ChangeWord } from './util.js';
 
-const title = adForm.querySelector('#title');
 const type = adForm.querySelector('#type');
 const priceInput = adForm.querySelector('#price');
 const sliderElement = adForm.querySelector('.ad-form__slider');
@@ -9,26 +7,25 @@ const rooms = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
-const TitleSymbols = {
-  MIN_SYMBOLS: 30,
-  MAX_SYMBOLS: 100
+
+const ChangeWord = {
+  palace: 'дворца',
+  flat: 'квартиры',
+  house: 'дома',
+  bungalow: 'бунгало',
+  hotel: 'отеля'
 };
-const PriceAmount = {
-  MIN_PRICE: {
-    palace: 10000,
-    flat: 1000,
-    house: 5000,
-    bungalow: 0,
-    hotel: 3000
-  },
-  MAX_PRICE: {
-    palace: 100000,
-    flat: 100000,
-    house: 100000,
-    bungalow: 100000,
-    hotel: 100000
-  }
+
+const minPrice = {
+  palace: 10000,
+  flat: 1000,
+  house: 5000,
+  bungalow: 0,
+  hotel: 3000
 };
+
+const maxPrice = 100000;
+
 const maxCapacity = {
   1: [1],
   2: [1, 2],
@@ -43,26 +40,15 @@ const pristine = new Pristine(adForm, {
   errorTextClass: 'ad-form__error-text',
 });
 
-// Валидация заголовка
-function validateTitle (value) {
-  return value.length >= TitleSymbols.MIN_SYMBOLS && value.length <= TitleSymbols.MAX_SYMBOLS;
-}
-
-function errorTitle () {
-  return `Введите от ${TitleSymbols.MIN_SYMBOLS} до ${TitleSymbols.MAX_SYMBOLS} символов`;
-}
-
-pristine.addValidator(title, validateTitle, errorTitle);
-
 // Валидация типа жилья и его цены
 function validatePrice (value) {
-  return value <= PriceAmount.MAX_PRICE[type.value] && value >= PriceAmount.MIN_PRICE[type.value];
+  return value <= maxPrice && value >= minPrice[type.value];
 }
 
 function errorPrice () {
-  return (priceInput.value > PriceAmount.MAX_PRICE[type.value])
-    ? `Стоимость ${ChangeWord[type.value]} не более ${PriceAmount.MAX_PRICE[type.value]}р`
-    : `Стоимость ${ChangeWord[type.value]} не меньше ${PriceAmount.MIN_PRICE[type.value]}р`;
+  return (priceInput.value > maxPrice)
+    ? `Стоимость ${ChangeWord[type.value]} не более ${maxPrice}р`
+    : `Стоимость ${ChangeWord[type.value]} не меньше ${minPrice[type.value]}р`;
 }
 
 pristine.addValidator(priceInput,validatePrice, errorPrice);
@@ -77,13 +63,10 @@ noUiSlider.create(sliderElement, {
   step: 15,
   connect: 'lower'
 });
-priceInput.min = PriceAmount.MIN_PRICE[type.value];
+priceInput.min = minPrice[type.value];
 
-sliderElement.noUiSlider.on('update', () => {
+sliderElement.noUiSlider.on('slide', () => {
   const sliderValue = Number(sliderElement.noUiSlider.get());
-  if (sliderValue === 0) {
-    priceInput.value = '';
-  }
   priceInput.value = sliderValue;
   pristine.validate(priceInput);
 });
@@ -93,8 +76,9 @@ priceInput.addEventListener('change', (evt) => {
 });
 
 type.addEventListener('change', () => {
-  priceInput.placeholder = PriceAmount.MIN_PRICE[type.value];
-  priceInput.min = PriceAmount.MIN_PRICE[type.value];
+  priceInput.placeholder = minPrice[type.value];
+  priceInput.min = minPrice[type.value];
+  pristine.validate();
 });
 
 // Валидация количества комнат и гостей

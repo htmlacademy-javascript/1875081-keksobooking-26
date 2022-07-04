@@ -39,7 +39,7 @@ const createAd = (index) => {
   };
   return {
     author: {
-      avatar: `img/avatars/user${String(index).padStart(2, '0')}.png`
+      avatar: `img/avatars/user${String(index + 1).padStart(2, '0')}.png`
     },
     offer: {
       title: 'Лучшее место для путешествий по России',
@@ -58,11 +58,15 @@ const createAd = (index) => {
   };
 };
 
-/**
- * Генерация объявлений
- * @param {integer} — количество объявлений, которое хотим сгенерировать
- * @return {Array} — массив сгенерированных объявлений
- */
-const createAds = () => Array.from({length: COUNT_ADS}, (_, i) => createAd(i + 1));
+//Генерация объявлений
 
-export {FEATURES, PHOTOS, createAds};
+const createAds = (count) => {
+  const ads = [];
+  for (let i = 0; i < count; i++) {
+    ads[i] = createAd(i);
+  }
+
+  return ads;
+};
+
+export {FEATURES, PHOTOS, createAds, COUNT_ADS};

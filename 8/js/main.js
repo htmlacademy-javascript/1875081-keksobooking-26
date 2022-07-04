@@ -1,4 +1,7 @@
+import { showCard } from './card.js';
 import './form-validate.js';
-import './map.js';
+import {generateCards} from './map.js';
+
+showCard(generateCards[0]);
 
 

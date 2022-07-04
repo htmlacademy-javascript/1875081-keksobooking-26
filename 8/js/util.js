@@ -64,20 +64,11 @@ function createCapacityMessage (tag, rooms, guest) {
   }
 }
 
-const ChangeWord = {
-  palace: 'дворца',
-  flat: 'квартиры',
-  house: 'дома',
-  bungalow: 'бунгало',
-  hotel: 'отеля'
-};
-
 export {
   getRandomInt,
   getRandomFloat,
   getRandomElementFromArray,
   getRandomElementsFromArray,
   deleteElement,
-  createCapacityMessage,
-  ChangeWord
+  createCapacityMessage
 };
