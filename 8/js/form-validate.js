@@ -1,4 +1,5 @@
 import { adForm } from './form-activate.js';
+import { showError, showSuccess, errorMessage, successMessage} from './util.js';
 
 const type = adForm.querySelector('#type');
 const priceInput = adForm.querySelector('#price');
@@ -7,6 +8,7 @@ const rooms = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
+const submitButton = adForm.querySelector('.ad-form__submit');
 
 const ChangeWord = {
   palace: 'дворца',
@@ -39,6 +41,16 @@ const pristine = new Pristine(adForm, {
   errorTextParent: 'ad-form__element',
   errorTextClass: 'ad-form__error-text',
 });
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
 
 // Валидация типа жилья и его цены
 function validatePrice (value) {
@@ -82,6 +94,10 @@ type.addEventListener('change', () => {
 });
 
 // Валидация количества комнат и гостей
+rooms.addEventListener('change', () => {
+  pristine.validate();
+});
+
 function validateCapacity () {
   return maxCapacity[+rooms.value].includes(+capacity.value);
 }
@@ -113,12 +129,44 @@ function errorTime () {
 
 pristine.addValidator(timeOut, validateTime, errorTime);
 
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const setUserFormSubmit = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValidate = pristine.validate();
+
+    if(isValidate) {
+      const formData = new FormData(evt.target);
+      blockSubmitButton();
+      fetch(
+        'https://26.javascript.pages.academy/keksobooking',
+        {
+          method: 'POST',
+          body: formData,
+        },
+      )
+        .then((response) => {
+          if (response.ok) {
+            onSuccess();
+            showSuccess(successMessage.textContent);
+            unblockSubmitButton();
+          } else {
+            showError(errorMessage.textContent);
+          }
+        })
+        .catch(() => {
+          showError(errorMessage.textContent);
+          unblockSubmitButton();
+        });
+    }
+  });
+};
+
+const resetForm = () => {
+  adForm.reset();
+};
 
 adForm.addEventListener('reset', () => {
   pristine.reset();
 });
 
+export {setUserFormSubmit, resetForm};

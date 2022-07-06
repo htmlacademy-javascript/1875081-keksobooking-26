@@ -1,7 +1,10 @@
+import { showError } from './util.js';
 import { showCard } from './card.js';
-import './form-validate.js';
-import {generateCards} from './map.js';
+import './form-activate.js';
+import {setUserFormSubmit, resetForm} from './form-validate.js';
+import { getData } from './api.js';
 
-showCard(generateCards[0]);
+getData(showCard, showError);
 
+setUserFormSubmit(resetForm);
 

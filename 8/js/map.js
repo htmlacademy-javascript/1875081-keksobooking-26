@@ -1,5 +1,5 @@
-import { createAds, COUNT_ADS } from './data.js';
 import { activateForm } from './form-activate.js';
+import { showCard } from './card.js';
 
 const resetButton = document.querySelector('.ad-form__reset');
 const addressInput = document.querySelector('#address');
@@ -23,8 +23,6 @@ const AD_PIN_ICON = L.icon({
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
-
-const generateCards = createAds(COUNT_ADS);
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -52,33 +50,21 @@ const mainPinMarker = L.marker(
 
 mainPinMarker.addTo(map);
 
-const createCustomPopup = (ad) => {
-  const balloonTemplate = document.querySelector('#balloon').content.querySelector('.balloon');
-  const popupElement = balloonTemplate.cloneNode(true);
-
-  popupElement.querySelector('.balloon__title').textContent = ad.offer.title;
-  popupElement.querySelector('.balloon__lat-lng').textContent = `Координаты: ${ad.location.lat}, ${ad.location.lng}`;
-
-  return popupElement;
-};
-
 const markerGroup = L.layerGroup().addTo(map);
 
-const createMarker = (ad) => {
+const createMarker = (card) => {
   const marker = L.marker({
-    lat: ad.location.lat,
-    lng: ad.location.lng,
+    lat: card.location.lat,
+    lng: card.location.lng,
   },
   {
     icon: AD_PIN_ICON,
   });
 
-  marker.addTo(markerGroup)
-    .bindPopup(createCustomPopup(ad));
+  marker
+    .addTo(markerGroup)
+    .bindPopup(showCard(card));
 };
-generateCards.slice(0, generateCards.length / 2).forEach((ad) => {
-  createMarker(ad);
-});
 
 mainPinMarker.on('move', (evt) => {
   const addressLat = String(evt.target.getLatLng().lat.toFixed(COORDS_DIGITS));
@@ -97,4 +83,4 @@ resetButton.addEventListener('click', () => {
   );
 });
 
-export {generateCards};
+export {createMarker};
