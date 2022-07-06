@@ -76,8 +76,9 @@ const hiddenPhotoElement = (element, data) => {
 // Удалить элементы списка без нужных модификаторов
 const removeFeatures = (list, featuresOffer) => {
   list.forEach((listItem) => {
-    const isModifiers = featuresOffer
-      .some((feature) => listItem.classList.contains(`popup__feature--${feature}`));
+    const isModifiers = featuresOffer.some((feature) => {
+      listItem.classList.contains(`popup__feature--${feature}`);
+    });
 
     if (!isModifiers) {
       listItem.remove();
@@ -107,7 +108,6 @@ const errorMessage = errorContainer.querySelector('.error__message');
 
 const showError = (message) => {
   errorContainer.style.fontSize = '70px';
-  errorContainer.style.color = 'red';
 
   errorMessage.textContent = message;
 
@@ -115,6 +115,10 @@ const showError = (message) => {
   errorContainer.append(errorButton);
 
   errorButton.addEventListener('click', () => {
+    errorContainer.remove();
+  });
+
+  document.addEventListener('click', () => {
     errorContainer.remove();
   });
 
@@ -128,16 +132,26 @@ const showError = (message) => {
 
 // Cообщение об успехе
 const SHOW_TIME = 5000;
-const successContainer = document.querySelector('#error').content.querySelector('.error');
-const successMessage = errorContainer.querySelector('.error__message');
+const successContainer = document.querySelector('#success').content.querySelector('.success');
+const successMessage = successContainer.querySelector('.success__message');
 
 const showSuccess = (message) => {
   successContainer.style.fontSize = '100px';
-  successContainer.style.color = 'green';
 
   successMessage.textContent = message;
 
   document.body.append(successContainer);
+
+  document.addEventListener('click', () => {
+    successContainer.remove();
+  });
+
+  document.addEventListener('keydown', (evt) => {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      successContainer.classList.add('hidden');
+    }
+  });
 
   setTimeout(() => {
     successContainer.remove();

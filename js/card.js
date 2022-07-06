@@ -32,7 +32,6 @@ const showCard = (card) => {
   hiddenElement(cardAdress, card.offer.address);
   hiddenElement(cardPrice, card.offer.price);
   hiddenElement(cardDescription, card.offer.description);
-  // Почему 1 гость не включается в список.
   createCapacityMessage(cardCapacity, card.offer.rooms, card.offer.guest);
   cardTime.textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
 

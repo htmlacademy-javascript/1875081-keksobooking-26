@@ -8,6 +8,7 @@ const rooms = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
+const submitButton = adForm.querySelector('.ad-form__submit');
 
 const ChangeWord = {
   palace: 'дворца',
@@ -40,6 +41,16 @@ const pristine = new Pristine(adForm, {
   errorTextParent: 'ad-form__element',
   errorTextClass: 'ad-form__error-text',
 });
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
 
 // Валидация типа жилья и его цены
 function validatePrice (value) {
@@ -125,7 +136,7 @@ const setUserFormSubmit = (onSuccess) => {
 
     if(isValidate) {
       const formData = new FormData(evt.target);
-
+      blockSubmitButton();
       fetch(
         'https://26.javascript.pages.academy/keksobooking',
         {
@@ -137,12 +148,14 @@ const setUserFormSubmit = (onSuccess) => {
           if (response.ok) {
             onSuccess();
             showSuccess(successMessage.textContent);
+            unblockSubmitButton();
           } else {
             showError(errorMessage.textContent);
           }
         })
         .catch(() => {
           showError(errorMessage.textContent);
+          unblockSubmitButton();
         });
     }
   });
