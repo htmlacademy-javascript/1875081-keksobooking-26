@@ -1,4 +1,5 @@
 import { adForm } from './form-activate.js';
+import { showError, showSuccess, errorMessage, successMessage} from './util.js';
 
 const type = adForm.querySelector('#type');
 const priceInput = adForm.querySelector('#price');
@@ -82,6 +83,10 @@ type.addEventListener('change', () => {
 });
 
 // Валидация количества комнат и гостей
+rooms.addEventListener('change', () => {
+  pristine.validate();
+});
+
 function validateCapacity () {
   return maxCapacity[+rooms.value].includes(+capacity.value);
 }
@@ -113,12 +118,42 @@ function errorTime () {
 
 pristine.addValidator(timeOut, validateTime, errorTime);
 
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+const setUserFormSubmit = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const isValidate = pristine.validate();
+
+    if(isValidate) {
+      const formData = new FormData(evt.target);
+
+      fetch(
+        'https://26.javascript.pages.academy/keksobooking',
+        {
+          method: 'POST',
+          body: formData,
+        },
+      )
+        .then((response) => {
+          if (response.ok) {
+            onSuccess();
+            showSuccess(successMessage.textContent);
+          } else {
+            showError(errorMessage.textContent);
+          }
+        })
+        .catch(() => {
+          showError(errorMessage.textContent);
+        });
+    }
+  });
+};
+
+const resetForm = () => {
+  adForm.reset();
+};
 
 adForm.addEventListener('reset', () => {
   pristine.reset();
 });
 
+export {setUserFormSubmit, resetForm};
