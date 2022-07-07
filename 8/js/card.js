@@ -17,6 +17,7 @@ const showCard = (card) => {
   const cardTitle = cardElement.querySelector('.popup__title');
   const cardAdress = cardElement.querySelector('.popup__text--address');
   const cardPrice = cardElement.querySelector('.js-price');
+  cardPrice.textContent = card.offer.price;
   const cardType = cardElement.querySelector('.popup__type');
   const cardCapacity = cardElement.querySelector('.popup__text--capacity');
   const cardTime = cardElement.querySelector('.popup__text--time');
@@ -30,7 +31,7 @@ const showCard = (card) => {
   hiddenPhotoElement(cardAvatar, card.author.avatar);
   hiddenElement(cardTitle, card.offer.title);
   hiddenElement(cardAdress, card.offer.address);
-  hiddenElement(cardPrice, card.offer.price);
+  // hiddenElement(cardPrice, card.offer.price);
   hiddenElement(cardDescription, card.offer.description);
   createCapacityMessage(cardCapacity, card.offer.rooms, card.offer.guest);
   cardTime.textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
