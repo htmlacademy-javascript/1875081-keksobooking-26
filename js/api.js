@@ -1,7 +1,7 @@
 import {createMarker} from './map.js';
 
 const MIN_CARD_COUNT = 0;
-const MAX_CARDS_COUNT = 3;
+const MAX_CARDS_COUNT = 5;
 
 const getData = (onSuccess, onFail) => {
   fetch('https://26.javascript.pages.academy/keksobooking/data')
