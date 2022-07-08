@@ -1,5 +1,8 @@
-import { createCapacityMessage, hiddenElement, hiddenPhotoElement, removeFeatures, addPhotoSrc } from './util.js';
+import { createMarker } from './map.js';
+import { createCapacityMessage, hiddenElement, hiddenPhotoElement, removeFeatures, addPhotoSrc} from './util.js';
 
+const MIN_CARD_COUNT = 0;
+const MAX_CARD_COUNT = 10;
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const types = {
@@ -10,14 +13,55 @@ const types = {
   hotel: 'Отель'
 };
 
+// const Default = {
+//   TYPE: 'any',
+//   PRICE: 'any',
+//   ROOMS: 'any',
+//   GUESTS: 'any'
+// };
+
+// const similarAds = (ads) => {
+//   const housingType = document.querySelector('#housing-type');
+//   const housingPrice = document.querySelector('#housing-price');
+//   const housingRooms = document.querySelector('#housing-rooms');
+//   const housingGuests = document.querySelector('#housing-guests');
+//   const housingFeatures = document.querySelector('[name="features"');
+
+//   let rank = 0;
+
+//   if (ads.offer.type === (housingType.value || Default.TYPE)) {
+//     rank +=1;
+//   }
+//   if (ads.offer.price === (housingPrice.value || Default.PRICE)) {
+//     rank +=1;
+//   }
+
+//   if (ads.offer.rooms === (housingRooms.value || Default.Rooms)) {
+//     rank +=1;
+//   }
+//   if (ads.offer.guests === (housingGuests.value || Default.GUESTS)) {
+//     rank +=1;
+//   }
+
+//   if (ads.offer.features === (housingFeatures.value)) {
+//     rank +=1;
+//   }
+
+//   return rank;
+// };
+
+const renderMarkers = (cards) => {
+  const slisedCards = cards.slice(MIN_CARD_COUNT, MAX_CARD_COUNT);
+  slisedCards.forEach((cardElement) => createMarker(cardElement));
+};
+
 const showCard = (card) => {
   const cardElement = cardTemplate.cloneNode(true);
 
   const cardAvatar = cardElement.querySelector('.popup__avatar');
   const cardTitle = cardElement.querySelector('.popup__title');
-  const cardAdress = cardElement.querySelector('.popup__text--address');
+  const cardAddress = cardElement.querySelector('.popup__text--address');
   const cardPrice = cardElement.querySelector('.js-price');
-  cardPrice.textContent = card.offer.price;
   const cardType = cardElement.querySelector('.popup__type');
   const cardCapacity = cardElement.querySelector('.popup__text--capacity');
   const cardTime = cardElement.querySelector('.popup__text--time');
@@ -30,25 +74,30 @@ const showCard = (card) => {
 
   hiddenPhotoElement(cardAvatar, card.author.avatar);
   hiddenElement(cardTitle, card.offer.title);
-  hiddenElement(cardAdress, card.offer.address);
-  // hiddenElement(cardPrice, card.offer.price);
+  hiddenElement(cardAddress, card.offer.address);
   hiddenElement(cardDescription, card.offer.description);
   createCapacityMessage(cardCapacity, card.offer.rooms, card.offer.guest);
   cardTime.textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
 
-  if (card.offer.features && card.offer.features.length > 0) {
+  if (card.offer['price'] !== undefined) {
+    cardPrice.textContent = card.offer.price;
+  } else {
+    cardPrice.parentElement.remove();
+  }
+
+  if (card.offer.features) {
     removeFeatures(featureList, card.offer.features);
   } else {
     featuresContainer.classList.add('hidden');
   }
 
-  if (card.offer.type && card.offer.type.length > 0) {
+  if (card.offer.type) {
     cardType.textContent = types[card.offer.type];
   } else {
     cardType.classList.add('hidden');
   }
 
-  if (card.offer.photos && card.offer.photos.length > 0) {
+  if (card.offer.photos) {
     addPhotoSrc(photoCard, card.offer.photos, photosContainer);
   } else {
     photosContainer.classList.add('hidden');
@@ -57,4 +106,4 @@ const showCard = (card) => {
   return cardElement;
 };
 
-export {showCard};
+export {renderMarkers, showCard};

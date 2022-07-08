@@ -1,5 +1,7 @@
-import { activateForm } from './form-activate.js';
-import { showCard } from './card.js';
+import { showCard} from './card.js';
+import { sliderElement} from './form-validate.js';
+import { adForm } from './form-activate.js';
+import { previewAvatar, previewPhotoHome } from './avatar.js';
 
 const resetButton = document.querySelector('.ad-form__reset');
 const addressInput = document.querySelector('#address');
@@ -24,14 +26,13 @@ const AD_PIN_ICON = L.icon({
   iconAnchor: [20, 40],
 });
 
-const map = L.map('map-canvas')
-  .on('load', () => {
-    activateForm(true);
-  })
-  .setView(
-    COORDS_DEFAULT,
-    ZOOM_DEFAULT
-  );
+const setAdress = (lat, lng) => {
+  const addressLat = lat;
+  const addressLng = lng;
+  addressInput.value =  `Широта: ${addressLat}, долгота: ${addressLng}`;
+};
+
+const map = L.map('map-canvas');
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -67,20 +68,34 @@ const createMarker = (card) => {
 };
 
 mainPinMarker.on('move', (evt) => {
-  const addressLat = String(evt.target.getLatLng().lat.toFixed(COORDS_DIGITS));
-  const addressLng = String(evt.target.getLatLng().lng.toFixed(COORDS_DIGITS));
-  addressInput.value =  `Широта: ${addressLat}, долгота: ${addressLng}`;
+  setAdress(
+    String(evt.target.getLatLng().lat.toFixed(COORDS_DIGITS)),
+    String(evt.target.getLatLng().lng.toFixed(COORDS_DIGITS))
+  );
 });
 
-resetButton.addEventListener('click', () => {
+const resetForm = () => {
+  adForm.reset();
+  previewAvatar.src = 'img/muffin-grey.svg';
+  while (previewPhotoHome.firstChild) {
+    previewPhotoHome.removeChild(previewPhotoHome.firstChild);
+  }
+  markerGroup.clearLayers();
+  sliderElement.noUiSlider.reset();
+  setAdress(COORDS_DEFAULT.lat, COORDS_DEFAULT.lng);
+
   mainPinMarker.setLatLng(
-    COORDS_DEFAULT
+    COORDS_DEFAULT,
   );
 
   map.setView(
     COORDS_DEFAULT,
     ZOOM_DEFAULT
   );
+};
+
+resetButton.addEventListener('click', () => {
+  resetForm();
 });
 
-export {createMarker};
+export {map, createMarker, markerGroup, setAdress, COORDS_DEFAULT, ZOOM_DEFAULT, resetForm};
