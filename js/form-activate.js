@@ -25,8 +25,6 @@ const activateForm = (isActiveForm) => {
   }
 };
 
-activateForm(false);
-
 export {adForm, activateForm};
 
 

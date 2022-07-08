@@ -32,3 +32,4 @@ filePhotoHome.addEventListener('change', () => {
   }
 });
 
+export {previewAvatar, previewPhotoHome};

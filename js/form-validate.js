@@ -1,5 +1,6 @@
+import { sendData} from './api.js';
 import { adForm } from './form-activate.js';
-import { showError, showSuccess, errorMessage, successMessage} from './util.js';
+import { showError, errorMessage} from './util.js';
 
 const type = adForm.querySelector('#type');
 const priceInput = adForm.querySelector('#price');
@@ -75,6 +76,7 @@ noUiSlider.create(sliderElement, {
   step: 15,
   connect: 'lower'
 });
+
 priceInput.min = minPrice[type.value];
 
 sliderElement.noUiSlider.on('slide', () => {
@@ -137,36 +139,16 @@ const setUserFormSubmit = (onSuccess) => {
     if(isValidate) {
       const formData = new FormData(evt.target);
       blockSubmitButton();
-      fetch(
-        'https://26.javascript.pages.academy/keksobooking',
-        {
-          method: 'POST',
-          body: formData,
-        },
-      )
-        .then((response) => {
-          if (response.ok) {
-            onSuccess();
-            showSuccess(successMessage.textContent);
-            unblockSubmitButton();
-          } else {
-            showError(errorMessage.textContent);
-          }
-        })
-        .catch(() => {
-          showError(errorMessage.textContent);
-          unblockSubmitButton();
-        });
+      sendData(formData, onSuccess, () => {
+        showError(errorMessage.textContent);
+        unblockSubmitButton();
+      });
     }
   });
-};
-
-const resetForm = () => {
-  adForm.reset();
 };
 
 adForm.addEventListener('reset', () => {
   pristine.reset();
 });
 
-export {setUserFormSubmit, resetForm};
+export {setUserFormSubmit, unblockSubmitButton, sliderElement};
