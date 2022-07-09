@@ -1,10 +1,11 @@
 import { showError, showSuccess, successMessage } from './util.js';
 import { activateForm } from './form-activate.js';
-import { renderMarkers} from './card.js';
+// import { renderMarkers} from './card.js';
 import { setUserFormSubmit, unblockSubmitButton } from './form-validate.js';
 import { map, setAdress, COORDS_DEFAULT, ZOOM_DEFAULT, resetForm } from './map.js';
 import { getData } from './api.js';
 import './avatar.js';
+import { filterArr, clearFilter } from './filters.js';
 
 activateForm(false);
 
@@ -19,7 +20,8 @@ map
   );
 
 getData((cards) => {
-  renderMarkers(cards);
+  filterArr(cards);
+  clearFilter(() => filterArr(cards));
 }, showError);
 
 setUserFormSubmit(() => {

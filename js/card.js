@@ -1,8 +1,5 @@
-import { createMarker} from './map.js';
 import { createCapacityMessage, hiddenElement, hiddenPhotoElement, removeFeatures, addPhotoSrc} from './util.js';
 
-const MIN_CARD_COUNT = 0;
-const MAX_CARD_COUNT = 10;
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
 const types = {
@@ -11,11 +8,6 @@ const types = {
   house: 'Дом',
   bungalow: 'Бунгало',
   hotel: 'Отель'
-};
-
-const renderMarkers = (cards) => {
-  const slisedCards = cards.slice(MIN_CARD_COUNT, MAX_CARD_COUNT);
-  slisedCards.forEach((cardElement) => createMarker(cardElement));
 };
 
 const showCard = (card) => {
@@ -39,7 +31,7 @@ const showCard = (card) => {
   hiddenElement(cardTitle, card.offer.title);
   hiddenElement(cardAddress, card.offer.address);
   hiddenElement(cardDescription, card.offer.description);
-  createCapacityMessage(cardCapacity, card.offer.rooms, card.offer.guest);
+  createCapacityMessage(cardCapacity, card.offer.rooms, card.offer.guests);
   cardTime.textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
 
   if (card.offer['price'] !== undefined) {
@@ -69,4 +61,4 @@ const showCard = (card) => {
   return cardElement;
 };
 
-export {renderMarkers, showCard};
+export {showCard};
