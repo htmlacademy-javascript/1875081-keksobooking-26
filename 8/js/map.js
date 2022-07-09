@@ -22,7 +22,7 @@ const MAIN_PIN_ICON = L.icon({
 });
 
 const AD_PIN_ICON = L.icon({
-  iconUrl: '../img/pin.svg',
+  iconUrl: './img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
