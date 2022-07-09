@@ -1,4 +1,4 @@
-import { createMarker } from './map.js';
+import { createMarker} from './map.js';
 import { createCapacityMessage, hiddenElement, hiddenPhotoElement, removeFeatures, addPhotoSrc} from './util.js';
 
 const MIN_CARD_COUNT = 0;
@@ -12,43 +12,6 @@ const types = {
   bungalow: 'Бунгало',
   hotel: 'Отель'
 };
-
-// const Default = {
-//   TYPE: 'any',
-//   PRICE: 'any',
-//   ROOMS: 'any',
-//   GUESTS: 'any'
-// };
-
-// const similarAds = (ads) => {
-//   const housingType = document.querySelector('#housing-type');
-//   const housingPrice = document.querySelector('#housing-price');
-//   const housingRooms = document.querySelector('#housing-rooms');
-//   const housingGuests = document.querySelector('#housing-guests');
-//   const housingFeatures = document.querySelector('[name="features"');
-
-//   let rank = 0;
-
-//   if (ads.offer.type === (housingType.value || Default.TYPE)) {
-//     rank +=1;
-//   }
-//   if (ads.offer.price === (housingPrice.value || Default.PRICE)) {
-//     rank +=1;
-//   }
-
-//   if (ads.offer.rooms === (housingRooms.value || Default.Rooms)) {
-//     rank +=1;
-//   }
-//   if (ads.offer.guests === (housingGuests.value || Default.GUESTS)) {
-//     rank +=1;
-//   }
-
-//   if (ads.offer.features === (housingFeatures.value)) {
-//     rank +=1;
-//   }
-
-//   return rank;
-// };
 
 const renderMarkers = (cards) => {
   const slisedCards = cards.slice(MIN_CARD_COUNT, MAX_CARD_COUNT);
