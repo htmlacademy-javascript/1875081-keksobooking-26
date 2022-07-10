@@ -31,6 +31,8 @@ const uploadFileHome = () => {
       imgPhoto.style.height = '100px';
       imgPhoto.src = URL.createObjectURL(file);
       previewPhotoHome.appendChild(imgPhoto);
+    } else {
+      alert("You can only upload a maximum of 2 files");
     }
   });
 };
