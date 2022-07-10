@@ -1,42 +1,9 @@
-// Функции для вызова рандомного целого числа
-function getRandomInt (a, b) {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
-
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-}
-
-// Функция для вызова рандомного числа с плавающей точкой
-function getRandomFloat (a, b, digits = 1) {
-  const lower = Math.min(Math.abs(a), Math.abs(b));
-  const upper = Math.max(Math.abs(a), Math.abs(b));
-
-  const result = Math.random() * (upper - lower) + lower;
-  return +result.toFixed(digits);
-}
-
-// Функция для вызова рандомного элемента из массива
-
-function getRandomElementFromArray(element) {
-  return element[getRandomInt(0, element.length - 1)];
-}
-
-// Функция для вызова рандомного количества элементов из массива
-function getRandomElementsFromArray (elements) {
-  const elementsLength = getRandomInt(1, elements.length);
-  const arrayRandomElements = [];
-
-  while (arrayRandomElements.length < elementsLength) {
-    const randomElements = getRandomElementFromArray(elements);
-
-    if (!arrayRandomElements.includes(randomElements)) {
-      arrayRandomElements.push(randomElements);
-    }
-  }
-  return arrayRandomElements;
-}
-
+const SHOW_TIME = 5000;
+const successContainer = document.querySelector('#success').content.querySelector('.success');
+const successMessage = successContainer.querySelector('.success__message');
+const errorContainer = document.querySelector('#error').content.querySelector('.error');
+const errorButton = errorContainer.querySelector('.error__button');
+const errorMessage = errorContainer.querySelector('.error__message');
 // Функция для генерации правильного окончания в сообщении.
 // Как ее сделать красивее и проще?
 function createCapacityMessage (tag, rooms, guest) {
@@ -102,10 +69,6 @@ const addPhotoSrc = (photo, randomSrc, container) => {
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 // Собщение с ошибкой
-const errorContainer = document.querySelector('#error').content.querySelector('.error');
-const errorButton = errorContainer.querySelector('.error__button');
-const errorMessage = errorContainer.querySelector('.error__message');
-
 const showError = (message) => {
   errorContainer.style.fontSize = '70px';
 
@@ -131,10 +94,6 @@ const showError = (message) => {
 };
 
 // Cообщение об успехе
-const SHOW_TIME = 5000;
-const successContainer = document.querySelector('#success').content.querySelector('.success');
-const successMessage = successContainer.querySelector('.success__message');
-
 const showSuccess = (message) => {
   successContainer.style.fontSize = '100px';
 
@@ -159,33 +118,16 @@ const showSuccess = (message) => {
 };
 
 // Функция debounce для устранения дребезга
-function debounce (callback, timeoutDelay = 500) {
+const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
 
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-}
-// Функция throttle для пропуска кадров
-function throttle (callback, delayBetweenFrames) {
-  let lastTime = 0;
-
-  return (...rest) => {
-    const now = new Date();
-
-    if (now - lastTime >= delayBetweenFrames) {
-      callback.apply(this, rest);
-      lastTime = now;
-    }
-  };
-}
+};
 
 export {
-  getRandomInt,
-  getRandomFloat,
-  getRandomElementFromArray,
-  getRandomElementsFromArray,
   createCapacityMessage,
   hiddenElement,
   hiddenPhotoElement,
@@ -199,5 +141,4 @@ export {
   isEscapeKey,
   errorContainer,
   debounce,
-  throttle
 };

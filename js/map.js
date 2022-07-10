@@ -6,6 +6,7 @@ import { previewAvatar, previewPhotoHome } from './avatar.js';
 const AVATAR_DEFAULT = 'img/muffin-grey.svg';
 const resetButton = document.querySelector('.ad-form__reset');
 const addressInput = document.querySelector('#address');
+const filtersForm = document.querySelector('.map__filters-container');
 
 const COORDS_DEFAULT = {
   lat: 35.6895,
