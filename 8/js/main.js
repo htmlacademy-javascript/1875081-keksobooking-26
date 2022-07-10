@@ -1,11 +1,12 @@
-import { showError, showSuccess, successMessage } from './util.js';
+import { showError, showSuccess, successMessage, debounce } from './util.js';
 import { activateForm } from './form-activate.js';
-// import { renderMarkers} from './card.js';
 import { setUserFormSubmit, unblockSubmitButton } from './form-validate.js';
 import { map, setAdress, COORDS_DEFAULT, ZOOM_DEFAULT, resetForm } from './map.js';
 import { getData } from './api.js';
-import './avatar.js';
 import { filterArr, clearFilter } from './filters.js';
+import { uploadFileAvatar, uploadFileHome } from './avatar.js';
+
+const RERENDER_DELAY = 500;
 
 activateForm(false);
 
@@ -21,7 +22,7 @@ map
 
 getData((cards) => {
   filterArr(cards);
-  clearFilter(() => filterArr(cards));
+  clearFilter(debounce(() => filterArr(cards), RERENDER_DELAY));
 }, showError);
 
 setUserFormSubmit(() => {
@@ -30,3 +31,5 @@ setUserFormSubmit(() => {
   unblockSubmitButton();
 });
 
+uploadFileAvatar();
+uploadFileHome();
