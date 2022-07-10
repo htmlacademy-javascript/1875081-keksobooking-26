@@ -4,7 +4,7 @@ import { setUserFormSubmit, unblockSubmitButton } from './form-validate.js';
 import { map, setAdress, COORDS_DEFAULT, ZOOM_DEFAULT, resetForm } from './map.js';
 import { getData } from './api.js';
 import { filterArr, clearFilter } from './filters.js';
-import './avatar.js';
+import { uploadFileAvatar, uploadFileHome } from './avatar.js';
 
 const RERENDER_DELAY = 500;
 
@@ -31,3 +31,5 @@ setUserFormSubmit(() => {
   unblockSubmitButton();
 });
 
+uploadFileAvatar();
+uploadFileHome();
