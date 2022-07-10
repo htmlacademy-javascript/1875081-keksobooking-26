@@ -46,7 +46,7 @@ const filterArr = (ads) => {
   const newArr = [];
 
   ads.slice(MIN_CARD_COUNT, MAX_CARD_COUNT).forEach((ad) => {
-    if (chooseType(ad) && choosePrice(ad) && chooseRooms(ad) && chooseGuests(ad) && chooseFeatures) {
+    if (chooseType(ad) && choosePrice(ad) && chooseRooms(ad) && chooseGuests(ad) && chooseFeatures(ad)) {
       const card = createMarker(ad);
       newArr.push(card);
     }
