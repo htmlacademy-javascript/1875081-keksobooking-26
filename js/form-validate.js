@@ -50,7 +50,7 @@ function blockSubmitButton () {
 function unblockSubmitButton () {
   submitButton.disabled = false;
   submitButton.textContent = 'Опубликовать';
-};
+}
 
 // Валидация типа жилья и его цены
 function validatePrice (value) {
