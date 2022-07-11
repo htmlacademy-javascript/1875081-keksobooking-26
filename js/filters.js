@@ -1,8 +1,7 @@
 import { createMarker, clearMarkers} from './map.js';
 
-const MIN_CARD_COUNT = 0;
 const MAX_CARD_COUNT = 10;
-const DEFAULT = 'any';
+const DEFAULT_VALUE = 'any';
 
 const priceForFilter = {
   low: {
@@ -24,43 +23,72 @@ const filterType = filtersContainer.querySelector('#housing-type');
 const filterPrice = filtersContainer.querySelector('#housing-price');
 const filterRooms = filtersContainer.querySelector('#housing-rooms');
 const filterGuests = filtersContainer.querySelector('#housing-guests');
-const filterFeatureList = filtersContainer.querySelectorAll('.map__checkbox');
+// const filterFeatureList = filtersContainer.querySelectorAll('.map__checkbox');
 
-const chooseType = (ad) => filterType.value === DEFAULT || ad.offer.type === filterType.value;
-const choosePrice = (ad) => filterPrice.value === DEFAULT || (ad.offer.price >= priceForFilter[filterPrice.value].min && ad.offer.price <= priceForFilter[filterPrice.value].max);
-const chooseRooms = (ad) => filterRooms.value === DEFAULT || ad.offer.rooms === +filterRooms.value;
-const chooseGuests = (ad) => filterGuests.value === DEFAULT || ad.offer.guests === +filterGuests.value;
+function chooseType (ad) {
+  return filterType.value === DEFAULT_VALUE || ad.offer.type === filterType.value;
+}
 
-const chooseFeatures = (ad) => {
-  const cardFeatures = ad.offer.features;
-  filterFeatureList.forEach((feature) => {
-    if (feature.checked && cardFeatures.includes(feature.value)) {
-      return true;
+function choosePrice (ad) {
+  return filterPrice.value === DEFAULT_VALUE || (ad.offer.price >= priceForFilter[filterPrice.value].min && ad.offer.price <= priceForFilter[filterPrice.value].max);
+}
+
+function chooseRooms (ad) {
+  return filterRooms.value === DEFAULT_VALUE || ad.offer.rooms === +filterRooms.value;
+}
+
+function chooseGuests (ad) {
+  return filterGuests.value === DEFAULT_VALUE || ad.offer.guests === +filterGuests.value;
+}
+
+// function chooseFeatures (ad) {
+//   const cardFeatures = ad.offer.features;
+//   if (cardFeatures) {
+//     filterFeatureList.forEach((feature) => {
+//       if (cardFeatures.includes(feature.value)) {
+//         return true;
+//       }
+//     });
+//     return false;
+//   }
+// };
+
+// function chooseFeatures (ad) {
+//   const checked = [];
+//   filterFeatureList.forEach((feature) => {
+//     if (feature.checked) {
+//       checked.push(feature.value);
+//     }
+//   });
+
+//   if (ad.offer.features) {
+//     return ad.offer.features
+//       .every((el) => checked.includes(el));
+//   }
+// };
+
+function createAds (ads) {
+  const filteredCards = [];
+
+  ads.forEach((ad) => {
+    if (chooseType(ad) && choosePrice(ad) && chooseRooms(ad) && chooseGuests(ad)) {
+      if (filteredCards.length < MAX_CARD_COUNT) {
+        const card = createMarker(ad);
+        filteredCards.push(card);
+      }
     }
   });
 
-  return false;
-};
+  return filteredCards;
+}
 
-const filterArr = (ads) => {
-  const newArr = [];
 
-  ads.slice(MIN_CARD_COUNT, MAX_CARD_COUNT).forEach((ad) => {
-    if (chooseType(ad) && choosePrice(ad) && chooseRooms(ad) && chooseGuests(ad) && chooseFeatures(ad)) {
-      const card = createMarker(ad);
-      newArr.push(card);
-    }
-  });
-
-  return newArr;
-};
-
-const clearFilter = (cb) => {
+function renderPinOnMap (cb) {
   filtersContainer.addEventListener('change', () => {
     clearMarkers();
     cb();
   });
-};
+}
 
-export {filterArr, clearFilter};
+export {createAds, renderPinOnMap};
 

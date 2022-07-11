@@ -1,7 +1,6 @@
 import { createCapacityMessage, hiddenElement, hiddenPhotoElement, removeFeatures, addPhotoSrc} from './util.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
-
 const types = {
   palace: 'Дворец',
   flat: 'Квартира',
@@ -10,7 +9,7 @@ const types = {
   hotel: 'Отель'
 };
 
-const showCard = (card) => {
+function showCard (card) {
   const cardElement = cardTemplate.cloneNode(true);
 
   const cardAvatar = cardElement.querySelector('.popup__avatar');
@@ -34,7 +33,7 @@ const showCard = (card) => {
   createCapacityMessage(cardCapacity, card.offer.rooms, card.offer.guests);
   cardTime.textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
 
-  if (card.offer['price'] !== undefined) {
+  if (card.offer.price) {
     cardPrice.textContent = card.offer.price;
   } else {
     cardPrice.parentElement.remove();
@@ -59,6 +58,6 @@ const showCard = (card) => {
   }
 
   return cardElement;
-};
+}
 
 export {showCard};

@@ -23,25 +23,25 @@ function createCapacityMessage (tag, rooms, guest) {
 }
 
 // Скрыть элемент с textContent, если длина = 0
-const hiddenElement = (element, data) => {
+function hiddenElement (element, data) {
   if (data) {
     element.textContent = data;
   } else {
     element.classList.add('hidden');
   }
-};
+}
 
 // Скрыть фото c src, если длина = 0
-const hiddenPhotoElement = (element, data) => {
+function hiddenPhotoElement (element, data) {
   if (data) {
     element.src = data;
   } else {
     element.classList.add('hidden');
   }
-};
+}
 
 // Удалить элементы списка без нужных модификаторов
-const removeFeatures = (list, featuresOffer) => {
+function removeFeatures (list, featuresOffer) {
   list.forEach((listItem) => {
     const isModifiers = featuresOffer.some((feature) => {
       listItem.classList.contains(`popup__feature--${feature}`);
@@ -51,10 +51,10 @@ const removeFeatures = (list, featuresOffer) => {
       listItem.remove();
     }
   });
-};
+}
 
 // Сделать клоны элементов с изображениями,если их не хватает
-const addPhotoSrc = (photo, randomSrc, container) => {
+function addPhotoSrc (photo, randomSrc, container) {
   randomSrc.forEach((value, index) => {
     if (index === 0) {
       photo.src = value;
@@ -64,14 +64,34 @@ const addPhotoSrc = (photo, randomSrc, container) => {
       container.append(photoClone);
     }
   });
-};
+}
 // Находит клавишу Escape
-const isEscapeKey = (evt) => evt.key === 'Escape';
+function isEscapeKey (evt) {
+  return evt.key === 'Escape';
+}
+
+function onPopupEscKeydown (evt, container) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    removePopup(container);
+  }
+}
+
+function onPopupClick (container) {
+  removePopup(container);
+}
+
+// Удаление попапов и обработчиков событий
+function removePopup (container) {
+  container.remove();
+
+  document.removeEventListener('click', onPopupClick);
+
+  document.removeEventListener('keydown', onPopupEscKeydown);
+}
 
 // Собщение с ошибкой
-const showError = (message) => {
-  errorContainer.style.fontSize = '70px';
-
+function showError (message) {
   errorMessage.textContent = message;
 
   document.body.append(errorContainer);
@@ -81,51 +101,35 @@ const showError = (message) => {
     errorContainer.remove();
   });
 
-  document.addEventListener('click', () => {
-    errorContainer.remove();
-  });
+  document.addEventListener('click', () => onPopupClick(errorContainer));
 
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      errorContainer.classList.add('hidden');
-    }
-  });
-};
+  document.addEventListener('keydown', () => onPopupEscKeydown(errorContainer));
+}
 
 // Cообщение об успехе
-const showSuccess = (message) => {
-  successContainer.style.fontSize = '100px';
-
+function showSuccess (message) {
   successMessage.textContent = message;
 
   document.body.append(successContainer);
 
-  document.addEventListener('click', () => {
-    successContainer.remove();
-  });
+  document.addEventListener('click', () => onPopupClick(successContainer));
 
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      successContainer.classList.add('hidden');
-    }
-  });
+  document.addEventListener('keydown', () => onPopupEscKeydown(successContainer));
 
   setTimeout(() => {
     successContainer.remove();
   }, SHOW_TIME);
-};
+}
 
 // Функция debounce для устранения дребезга
-const debounce = (callback, timeoutDelay = 500) => {
+function debounce (callback, timeoutDelay = 500) {
   let timeoutId;
 
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-};
+}
 
 export {
   createCapacityMessage,

@@ -4,37 +4,38 @@ import { adForm } from './form-activate.js';
 import { previewAvatar, previewPhotoHome } from './avatar.js';
 
 const AVATAR_DEFAULT = 'img/muffin-grey.svg';
-const resetButton = document.querySelector('.ad-form__reset');
-const addressInput = document.querySelector('#address');
-const filtersForm = document.querySelector('.map__filters-container');
-
-const COORDS_DEFAULT = {
-  lat: 35.6895,
-  lng: 139.692,
-};
-
 const ZOOM_DEFAULT = 10;
 const COORDS_DIGITS = 5;
+const resetButton = document.querySelector('.ad-form__reset');
+const addressInput = document.querySelector('#address');
+const filtersForm = document.querySelector('.map__filters');
+const map = L.map('map-canvas');
+const coordsDefault = {
+  lat: 35.68950,
+  lng: 139.69200,
+};
 
-const MAIN_PIN_ICON = L.icon({
+const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
   iconSize: [52, 52],
   iconAnchor: [26, 52],
 });
 
-const AD_PIN_ICON = L.icon({
+const adPinIcon = L.icon({
   iconUrl: './img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
 
-const setAdress = (lat, lng) => {
-  const addressLat = lat;
-  const addressLng = lng;
-  addressInput.value =  `Широта: ${addressLat}, долгота: ${addressLng}`;
-};
+const mainPinMarker = L.marker(
+  coordsDefault,
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
 
-const map = L.map('map-canvas');
+const markerGroup = L.layerGroup().addTo(map);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -43,33 +44,7 @@ L.tileLayer(
   },
 ).addTo(map);
 
-const mainPinMarker = L.marker(
-  COORDS_DEFAULT,
-  {
-    draggable: true,
-    icon: MAIN_PIN_ICON,
-  },
-);
-
 mainPinMarker.addTo(map);
-
-const markerGroup = L.layerGroup().addTo(map);
-
-const createMarker = (card) => {
-  const marker = L.marker({
-    lat: card.location.lat,
-    lng: card.location.lng,
-  },
-  {
-    icon: AD_PIN_ICON,
-  });
-
-  marker
-    .addTo(markerGroup)
-    .bindPopup(showCard(card));
-};
-
-const clearMarkers = () => markerGroup.clearLayers();
 
 mainPinMarker.on('move', (evt) => {
   setAdress(
@@ -78,26 +53,65 @@ mainPinMarker.on('move', (evt) => {
   );
 });
 
-const resetForm = () => {
+function setAdress (lat, lng) {
+  const addressLat = lat;
+  const addressLng = lng;
+  addressInput.value =  `Широта: ${addressLat}, долгота: ${addressLng}`;
+}
+
+function createMap (form) {
+  map
+    .on('load', () => {
+      form(true);
+      setAdress(coordsDefault.lat, coordsDefault.lng);
+    })
+    .setView(
+      coordsDefault,
+      ZOOM_DEFAULT
+    );
+}
+
+function createMarker (card) {
+  const marker = L.marker({
+    lat: card.location.lat,
+    lng: card.location.lng,
+  },
+  {
+    icon: adPinIcon,
+  });
+
+  marker
+    .addTo(markerGroup)
+    .bindPopup(showCard(card));
+}
+
+function clearMarkers () {
+  markerGroup.clearLayers();
+}
+
+
+function resetForm () {
+  filtersForm.reset();
   adForm.reset();
-  setAdress(COORDS_DEFAULT.lat, COORDS_DEFAULT.lng);
+  setAdress(coordsDefault.lat, coordsDefault.lng);
   previewAvatar.src = AVATAR_DEFAULT;
   previewPhotoHome.innerHTML = '';
   clearMarkers();
   sliderElement.noUiSlider.reset();
 
   mainPinMarker.setLatLng(
-    COORDS_DEFAULT,
+    coordsDefault,
   );
 
   map.setView(
-    COORDS_DEFAULT,
+    coordsDefault,
     ZOOM_DEFAULT
   );
-};
+}
 
-resetButton.addEventListener('click', () => {
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
   resetForm();
 });
 
-export {map, createMarker, clearMarkers, markerGroup, setAdress, COORDS_DEFAULT, ZOOM_DEFAULT, resetForm};
+export {createMap, createMarker, clearMarkers, markerGroup, setAdress, resetForm};

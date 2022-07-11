@@ -1,5 +1,4 @@
 const FILE_TYPES = ['jpg', 'jpeg', 'png'];
-
 const fileAvatar = document.querySelector('.ad-form-header__input');
 const previewAvatar = document.querySelector('.ad-form-header__avatar');
 const filePhotoHome = document.querySelector('.ad-form__input');
@@ -31,8 +30,6 @@ const uploadFileHome = () => {
       imgPhoto.style.height = '100px';
       imgPhoto.src = URL.createObjectURL(file);
       previewPhotoHome.appendChild(imgPhoto);
-    } else {
-      alert("You can only upload a maximum of 2 files");
     }
   });
 };
