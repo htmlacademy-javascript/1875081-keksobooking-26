@@ -1,6 +1,7 @@
 import { sendData} from './api.js';
 import { adForm } from './form-activate.js';
-import { showError, errorMessage} from './util.js';
+import { resetForm } from './reset-form.js';
+import { showError, errorMessage, showSuccess, successMessage} from './util.js';
 
 const SLIDER_STEP = 15;
 const MAX_PRICE = 100000;
@@ -12,6 +13,7 @@ const capacity = adForm.querySelector('#capacity');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
 const submitButton = adForm.querySelector('.ad-form__submit');
+const resetButton = document.querySelector('.ad-form__reset');
 
 const changeWord = {
   palace: 'дворца',
@@ -146,8 +148,26 @@ function setUserFormSubmit (onSuccess) {
   });
 }
 
-adForm.addEventListener('reset', () => {
+function successSend () {
+  setUserFormSubmit(() => {
+    showSuccess(successMessage.textContent);
+    resetForm(adForm);
+    unblockSubmitButton();
+  });
+}
+
+resetButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
   pristine.reset();
+  resetForm(adForm);
 });
 
-export {setUserFormSubmit, unblockSubmitButton, sliderElement};
+export {
+  setUserFormSubmit,
+  unblockSubmitButton,
+  sliderElement,
+  priceInput,
+  minPrice,
+  type,
+  successSend
+};

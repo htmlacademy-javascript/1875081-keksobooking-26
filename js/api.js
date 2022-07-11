@@ -33,4 +33,7 @@ const sendData = (dataForm, onSuccess, onFail) => {
     });
 };
 
-export {getData, sendData};
+export {
+  getData,
+  sendData
+};

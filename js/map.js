@@ -1,14 +1,8 @@
 import { showCard} from './card.js';
-import { sliderElement} from './form-validate.js';
-import { adForm } from './form-activate.js';
-import { previewAvatar, previewPhotoHome } from './avatar.js';
 
-const AVATAR_DEFAULT = 'img/muffin-grey.svg';
 const ZOOM_DEFAULT = 10;
 const COORDS_DIGITS = 5;
-const resetButton = document.querySelector('.ad-form__reset');
 const addressInput = document.querySelector('#address');
-const filtersForm = document.querySelector('.map__filters');
 const map = L.map('map-canvas');
 const coordsDefault = {
   lat: 35.68950,
@@ -89,29 +83,14 @@ function clearMarkers () {
   markerGroup.clearLayers();
 }
 
-
-function resetForm () {
-  filtersForm.reset();
-  adForm.reset();
-  setAdress(coordsDefault.lat, coordsDefault.lng);
-  previewAvatar.src = AVATAR_DEFAULT;
-  previewPhotoHome.innerHTML = '';
-  clearMarkers();
-  sliderElement.noUiSlider.reset();
-
-  mainPinMarker.setLatLng(
-    coordsDefault,
-  );
-
-  map.setView(
-    coordsDefault,
-    ZOOM_DEFAULT
-  );
-}
-
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  resetForm();
-});
-
-export {createMap, createMarker, clearMarkers, markerGroup, setAdress, resetForm};
+export {
+  ZOOM_DEFAULT,
+  createMap,
+  createMarker,
+  clearMarkers,
+  markerGroup,
+  setAdress,
+  coordsDefault,
+  map,
+  mainPinMarker
+};
