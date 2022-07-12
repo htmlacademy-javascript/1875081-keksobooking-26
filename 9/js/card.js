@@ -42,7 +42,7 @@ function showCard (card) {
   if (card.offer.features) {
     removeFeatures(featureList, card.offer.features);
   } else {
-    featuresContainer.classList.add('hidden');
+    featuresContainer.remove();
   }
 
   if (card.offer.type) {
@@ -60,4 +60,6 @@ function showCard (card) {
   return cardElement;
 }
 
-export {showCard};
+export {
+  showCard
+};

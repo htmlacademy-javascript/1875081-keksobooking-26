@@ -1,7 +1,7 @@
-import { showError, showSuccess, successMessage, debounce } from './util.js';
-import { activateForm } from './form-activate.js';
-import { setUserFormSubmit, unblockSubmitButton } from './form-validate.js';
-import { createMap, resetForm } from './map.js';
+import { showError, debounce } from './util.js';
+import { activateForm} from './form-activate.js';
+import { resetPage, successSend } from './form-validate.js';
+import { createMap} from './map.js';
 import { getData } from './api.js';
 import { createAds, renderPinOnMap} from './filters.js';
 import { uploadFileAvatar, uploadFileHome } from './avatar.js';
@@ -14,13 +14,9 @@ createMap(activateForm);
 getData((cards) => {
   createAds(cards);
   renderPinOnMap(debounce(() => createAds(cards), RERENDER_DELAY));
+  resetPage(debounce(() => createAds(cards), RERENDER_DELAY));
+  successSend(debounce(() => createAds(cards), RERENDER_DELAY));
 }, showError);
-
-setUserFormSubmit(() => {
-  showSuccess(successMessage.textContent);
-  resetForm();
-  unblockSubmitButton();
-});
 
 uploadFileAvatar();
 uploadFileHome();

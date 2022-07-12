@@ -34,4 +34,9 @@ const uploadFileHome = () => {
   });
 };
 
-export { uploadFileAvatar, uploadFileHome, previewAvatar, previewPhotoHome };
+export {
+  uploadFileAvatar,
+  uploadFileHome,
+  previewAvatar,
+  previewPhotoHome
+};
