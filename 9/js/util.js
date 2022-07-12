@@ -41,16 +41,23 @@ function hiddenPhotoElement (element, data) {
 }
 
 // Удалить элементы списка без нужных модификаторов
-function removeFeatures (list, featuresOffer) {
-  list.forEach((listItem) => {
-    const isModifiers = featuresOffer.some((feature) => {
-      listItem.classList.contains(`popup__feature--${feature}`);
-    });
+function renderFeatures (container, dataFeaturesList) {
+  if (dataFeaturesList) {
+    container.innerHTML = '';
 
-    if (!isModifiers) {
-      listItem.remove();
-    }
-  });
+    dataFeaturesList.forEach((feature) => {
+      const featureElement = document.createElement('li');
+
+      featureElement.classList.add(
+        'popup__feature',
+        `popup__feature--${feature}`
+      );
+
+      container.append(featureElement);
+    });
+  } else {
+    container.remove();
+  }
 }
 
 // Сделать клоны элементов с изображениями,если их не хватает
@@ -135,7 +142,7 @@ export {
   createCapacityMessage,
   hiddenElement,
   hiddenPhotoElement,
-  removeFeatures,
+  renderFeatures,
   addPhotoSrc,
   showError,
   showSuccess,

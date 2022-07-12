@@ -1,4 +1,4 @@
-import { createCapacityMessage, hiddenElement, hiddenPhotoElement, removeFeatures, addPhotoSrc} from './util.js';
+import { createCapacityMessage, hiddenElement, hiddenPhotoElement, renderFeatures, addPhotoSrc} from './util.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const types = {
@@ -20,12 +20,12 @@ function showCard (card) {
   const cardCapacity = cardElement.querySelector('.popup__text--capacity');
   const cardTime = cardElement.querySelector('.popup__text--time');
   const featuresContainer = cardElement.querySelector('.popup__features');
-  const featureList = featuresContainer.querySelectorAll('.popup__feature');
   const cardDescription = cardElement.querySelector('.popup__description');
   const photosContainer = cardElement.querySelector('.popup__photos');
   const photoCard = photosContainer.querySelector('.popup__photo');
 
 
+  renderFeatures(featuresContainer, card.offer.features);
   hiddenPhotoElement(cardAvatar, card.author.avatar);
   hiddenElement(cardTitle, card.offer.title);
   hiddenElement(cardAddress, card.offer.address);
@@ -37,12 +37,6 @@ function showCard (card) {
     cardPrice.textContent = card.offer.price;
   } else {
     cardPrice.parentElement.remove();
-  }
-
-  if (card.offer.features) {
-    removeFeatures(featureList, card.offer.features);
-  } else {
-    featuresContainer.remove();
   }
 
   if (card.offer.type) {

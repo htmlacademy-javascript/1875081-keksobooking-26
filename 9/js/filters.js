@@ -23,7 +23,7 @@ const filterType = filtersContainer.querySelector('#housing-type');
 const filterPrice = filtersContainer.querySelector('#housing-price');
 const filterRooms = filtersContainer.querySelector('#housing-rooms');
 const filterGuests = filtersContainer.querySelector('#housing-guests');
-// const filterFeatureList = filtersContainer.querySelectorAll('.map__checkbox:checked');
+// const filterFeatureList = filtersContainer.querySelectorAll('.map__checkbox');
 
 function chooseType (ad) {
   return filterType.value === DEFAULT_VALUE || ad.offer.type === filterType.value;
@@ -43,14 +43,14 @@ function chooseGuests (ad) {
 
 // function chooseFeatures (ad) {
 //   const cardFeatures = ad.offer.features;
-//   if (cardFeatures) {
-//     filterFeatureList.forEach((feature) => {
+//   filterFeatureList.forEach((feature) => {
+//     if (cardFeatures) {
 //       if (cardFeatures.includes(feature.value)) {
 //         return true;
 //       }
-//     });
-//     return false;
-//   }
+//     }
+//   });
+//   return false;
 // }
 
 // function chooseFeatures (ad) {
@@ -66,6 +66,16 @@ function chooseGuests (ad) {
 //       .every((el) => checked.includes(el));
 //   }
 // }
+
+// function chooseFeatures (ad) {
+//   for (const feature of filterFeatureList) {
+//     if (ad.includes(feature.value)) {
+//       return ad.includes(feature.value);
+//     }
+//   }
+//   return false;
+// }
+
 
 function createAds (ads) {
   const filteredCards = [];
