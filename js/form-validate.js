@@ -148,19 +148,23 @@ function setUserFormSubmit (onSuccess) {
   });
 }
 
-function successSend () {
+function successSend (cb) {
   setUserFormSubmit(() => {
     showSuccess(successMessage.textContent);
     resetForm(adForm);
+    cb();
     unblockSubmitButton();
   });
 }
 
-resetButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  pristine.reset();
-  resetForm(adForm);
-});
+function resetPage (cb) {
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    pristine.reset();
+    resetForm(adForm);
+    cb();
+  });
+}
 
 export {
   setUserFormSubmit,
@@ -169,5 +173,6 @@ export {
   priceInput,
   minPrice,
   type,
-  successSend
+  successSend,
+  resetPage
 };
