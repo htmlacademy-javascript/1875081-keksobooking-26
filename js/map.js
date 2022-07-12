@@ -42,8 +42,8 @@ mainPinMarker.addTo(map);
 
 mainPinMarker.on('move', (evt) => {
   setAdress(
-    String(evt.target.getLatLng().lat.toFixed(COORDS_DIGITS)),
-    String(evt.target.getLatLng().lng.toFixed(COORDS_DIGITS))
+    evt.target.getLatLng().lat.toFixed(COORDS_DIGITS),
+    evt.target.getLatLng().lng.toFixed(COORDS_DIGITS)
   );
 });
 
