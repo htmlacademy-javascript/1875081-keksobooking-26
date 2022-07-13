@@ -1,4 +1,4 @@
-import { minPrice, priceInput, sliderElement, type} from './form-validate.js';
+import { minPrice, priceInput, sliderElement, type } from './form-validate.js';
 import { previewAvatar, previewPhotoHome } from './avatar.js';
 import { clearMarkers, coordsDefault, mainPinMarker, map, setAdress, ZOOM_DEFAULT } from './map.js';
 

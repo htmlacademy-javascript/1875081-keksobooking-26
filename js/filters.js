@@ -1,4 +1,4 @@
-import { createMarker, clearMarkers} from './map.js';
+import { createMarker, clearMarkers } from './map.js';
 
 const MAX_CARD_COUNT = 10;
 const DEFAULT_VALUE = 'any';

@@ -1,4 +1,4 @@
-import { createCapacityMessage, hiddenElement, hiddenPhotoElement, renderFeatures, addPhotoSrc} from './util.js';
+import { createCapacityMessage, hiddenElement, hiddenPhotoElement, renderFeatures, addPhotoSrc } from './util.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const types = {

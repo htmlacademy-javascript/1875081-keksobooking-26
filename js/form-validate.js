@@ -1,7 +1,7 @@
-import { sendData} from './api.js';
+import { sendData } from './api.js';
 import { adForm } from './form-activate.js';
 import { resetForm } from './reset-form.js';
-import { showError, errorMessage, showSuccess, successMessage} from './util.js';
+import { showError, errorMessage, showSuccess, successMessage } from './util.js';
 
 const SLIDER_STEP = 15;
 const MAX_PRICE = 100000;

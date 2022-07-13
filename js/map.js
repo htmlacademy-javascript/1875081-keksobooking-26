@@ -1,4 +1,4 @@
-import { showCard} from './card.js';
+import { showCard } from './card.js';
 
 const ZOOM_DEFAULT = 10;
 const COORDS_DIGITS = 5;
