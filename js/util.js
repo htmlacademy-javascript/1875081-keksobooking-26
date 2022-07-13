@@ -1,44 +1,10 @@
-// Функции для вызова рандомного целого числа
-function getRandomInt (a, b) {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
+const SHOW_TIME = 5000;
+const successContainer = document.querySelector('#success').content.querySelector('.success');
+const successMessage = successContainer.querySelector('.success__message');
+const errorContainer = document.querySelector('#error').content.querySelector('.error');
+const errorButton = errorContainer.querySelector('.error__button');
+const errorMessage = errorContainer.querySelector('.error__message');
 
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-}
-
-// Функция для вызова рандомного числа с плавающей точкой
-function getRandomFloat (a, b, digits = 1) {
-  const lower = Math.min(Math.abs(a), Math.abs(b));
-  const upper = Math.max(Math.abs(a), Math.abs(b));
-
-  const result = Math.random() * (upper - lower) + lower;
-  return +result.toFixed(digits);
-}
-
-// Функция для вызова рандомного элемента из массива
-
-function getRandomElementFromArray(element) {
-  return element[getRandomInt(0, element.length - 1)];
-}
-
-// Функция для вызова рандомного количества элементов из массива
-function getRandomElementsFromArray (elements) {
-  const elementsLength = getRandomInt(1, elements.length);
-  const arrayRandomElements = [];
-
-  while (arrayRandomElements.length < elementsLength) {
-    const randomElements = getRandomElementFromArray(elements);
-
-    if (!arrayRandomElements.includes(randomElements)) {
-      arrayRandomElements.push(randomElements);
-    }
-  }
-  return arrayRandomElements;
-}
-
-// Функция для генерации правильного окончания в сообщении.
-// Как ее сделать красивее и проще?
 function createCapacityMessage (tag, rooms, guest) {
   if (rooms === 1 && guest === 1) {
     tag.textContent = `${rooms} комната для ${guest} гостя`;
@@ -55,39 +21,42 @@ function createCapacityMessage (tag, rooms, guest) {
   }
 }
 
-// Скрыть элемент с textContent, если длина = 0
-const hiddenElement = (element, data) => {
+function hiddenElement (element, data) {
   if (data) {
     element.textContent = data;
   } else {
     element.classList.add('hidden');
   }
-};
+}
 
-// Скрыть фото c src, если длина = 0
-const hiddenPhotoElement = (element, data) => {
+function hiddenPhotoElement (element, data) {
   if (data) {
     element.src = data;
   } else {
     element.classList.add('hidden');
   }
-};
+}
 
-// Удалить элементы списка без нужных модификаторов
-const removeFeatures = (list, featuresOffer) => {
-  list.forEach((listItem) => {
-    const isModifiers = featuresOffer.some((feature) => {
-      listItem.classList.contains(`popup__feature--${feature}`);
+function renderFeatures (container, dataFeaturesList) {
+  if (dataFeaturesList) {
+    container.innerHTML = '';
+
+    dataFeaturesList.forEach((feature) => {
+      const featureElement = document.createElement('li');
+
+      featureElement.classList.add(
+        'popup__feature',
+        `popup__feature--${feature}`
+      );
+
+      container.append(featureElement);
     });
+  } else {
+    container.remove();
+  }
+}
 
-    if (!isModifiers) {
-      listItem.remove();
-    }
-  });
-};
-
-// Сделать клоны элементов с изображениями,если их не хватает
-const addPhotoSrc = (photo, randomSrc, container) => {
+function addPhotoSrc (photo, randomSrc, container) {
   randomSrc.forEach((value, index) => {
     if (index === 0) {
       photo.src = value;
@@ -97,18 +66,33 @@ const addPhotoSrc = (photo, randomSrc, container) => {
       container.append(photoClone);
     }
   });
-};
-// Находит клавишу Escape
-const isEscapeKey = (evt) => evt.key === 'Escape';
+}
 
-// Собщение с ошибкой
-const errorContainer = document.querySelector('#error').content.querySelector('.error');
-const errorButton = errorContainer.querySelector('.error__button');
-const errorMessage = errorContainer.querySelector('.error__message');
+function isEscapeKey (evt) {
+  return evt.key === 'Escape' || evt.key === 'Esc';
+}
 
-const showError = (message) => {
-  errorContainer.style.fontSize = '70px';
+function onPopupEscKeydown (evt) {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    removePopup();
+  }
+}
 
+function onPopupClick () {
+  removePopup();
+}
+
+function removePopup () {
+  errorContainer.remove();
+  successContainer.remove();
+
+  document.removeEventListener('click', onPopupClick);
+
+  document.removeEventListener('keydown', onPopupEscKeydown);
+}
+
+function showError (message) {
   errorMessage.textContent = message;
 
   document.body.append(errorContainer);
@@ -118,47 +102,25 @@ const showError = (message) => {
     errorContainer.remove();
   });
 
-  document.addEventListener('click', () => {
-    errorContainer.remove();
-  });
+  document.addEventListener('click', onPopupClick);
 
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      errorContainer.classList.add('hidden');
-    }
-  });
-};
+  document.addEventListener('keydown', onPopupEscKeydown);
+}
 
-// Cообщение об успехе
-const SHOW_TIME = 5000;
-const successContainer = document.querySelector('#success').content.querySelector('.success');
-const successMessage = successContainer.querySelector('.success__message');
-
-const showSuccess = (message) => {
-  successContainer.style.fontSize = '100px';
-
+function showSuccess (message) {
   successMessage.textContent = message;
 
   document.body.append(successContainer);
 
-  document.addEventListener('click', () => {
-    successContainer.remove();
-  });
+  document.addEventListener('click', onPopupClick);
 
-  document.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      successContainer.classList.add('hidden');
-    }
-  });
+  document.addEventListener('keydown', onPopupEscKeydown);
 
   setTimeout(() => {
     successContainer.remove();
   }, SHOW_TIME);
-};
+}
 
-// Функция debounce для устранения дребезга
 function debounce (callback, timeoutDelay = 500) {
   let timeoutId;
 
@@ -167,29 +129,12 @@ function debounce (callback, timeoutDelay = 500) {
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
 }
-// Функция throttle для пропуска кадров
-function throttle (callback, delayBetweenFrames) {
-  let lastTime = 0;
-
-  return (...rest) => {
-    const now = new Date();
-
-    if (now - lastTime >= delayBetweenFrames) {
-      callback.apply(this, rest);
-      lastTime = now;
-    }
-  };
-}
 
 export {
-  getRandomInt,
-  getRandomFloat,
-  getRandomElementFromArray,
-  getRandomElementsFromArray,
   createCapacityMessage,
   hiddenElement,
   hiddenPhotoElement,
-  removeFeatures,
+  renderFeatures,
   addPhotoSrc,
   showError,
   showSuccess,
@@ -199,5 +144,4 @@ export {
   isEscapeKey,
   errorContainer,
   debounce,
-  throttle
 };

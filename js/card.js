@@ -1,7 +1,6 @@
-import { createCapacityMessage, hiddenElement, hiddenPhotoElement, removeFeatures, addPhotoSrc} from './util.js';
+import { createCapacityMessage, hiddenElement, hiddenPhotoElement, renderFeatures, addPhotoSrc} from './util.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
-
 const types = {
   palace: 'Дворец',
   flat: 'Квартира',
@@ -10,7 +9,7 @@ const types = {
   hotel: 'Отель'
 };
 
-const showCard = (card) => {
+function showCard (card) {
   const cardElement = cardTemplate.cloneNode(true);
 
   const cardAvatar = cardElement.querySelector('.popup__avatar');
@@ -21,12 +20,12 @@ const showCard = (card) => {
   const cardCapacity = cardElement.querySelector('.popup__text--capacity');
   const cardTime = cardElement.querySelector('.popup__text--time');
   const featuresContainer = cardElement.querySelector('.popup__features');
-  const featureList = featuresContainer.querySelectorAll('.popup__feature');
   const cardDescription = cardElement.querySelector('.popup__description');
   const photosContainer = cardElement.querySelector('.popup__photos');
   const photoCard = photosContainer.querySelector('.popup__photo');
 
 
+  renderFeatures(featuresContainer, card.offer.features);
   hiddenPhotoElement(cardAvatar, card.author.avatar);
   hiddenElement(cardTitle, card.offer.title);
   hiddenElement(cardAddress, card.offer.address);
@@ -34,16 +33,10 @@ const showCard = (card) => {
   createCapacityMessage(cardCapacity, card.offer.rooms, card.offer.guests);
   cardTime.textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
 
-  if (card.offer['price'] !== undefined) {
+  if (card.offer.price) {
     cardPrice.textContent = card.offer.price;
   } else {
     cardPrice.parentElement.remove();
-  }
-
-  if (card.offer.features) {
-    removeFeatures(featureList, card.offer.features);
-  } else {
-    featuresContainer.classList.add('hidden');
   }
 
   if (card.offer.type) {
@@ -59,6 +52,8 @@ const showCard = (card) => {
   }
 
   return cardElement;
-};
+}
 
-export {showCard};
+export {
+  showCard
+};

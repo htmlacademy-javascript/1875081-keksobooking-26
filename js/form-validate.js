@@ -1,7 +1,10 @@
 import { sendData} from './api.js';
 import { adForm } from './form-activate.js';
-import { showError, errorMessage} from './util.js';
+import { resetForm } from './reset-form.js';
+import { showError, errorMessage, showSuccess, successMessage} from './util.js';
 
+const SLIDER_STEP = 15;
+const MAX_PRICE = 100000;
 const type = adForm.querySelector('#type');
 const priceInput = adForm.querySelector('#price');
 const sliderElement = adForm.querySelector('.ad-form__slider');
@@ -10,8 +13,9 @@ const capacity = adForm.querySelector('#capacity');
 const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
 const submitButton = adForm.querySelector('.ad-form__submit');
+const resetButton = document.querySelector('.ad-form__reset');
 
-const ChangeWord = {
+const changeWord = {
   palace: 'дворца',
   flat: 'квартиры',
   house: 'дома',
@@ -27,8 +31,6 @@ const minPrice = {
   hotel: 3000
 };
 
-const maxPrice = 100000;
-
 const maxCapacity = {
   1: [1],
   2: [1, 2],
@@ -36,44 +38,41 @@ const maxCapacity = {
   100: [0]
 };
 
-// Весь код снизу нужно завернуть в функцию? Что-бы импортировать потом в main. Или как-то иначе?
 const pristine = new Pristine(adForm, {
   classTo: 'ad-form__element',
   errorTextParent: 'ad-form__element',
   errorTextClass: 'ad-form__error-text',
 });
 
-const blockSubmitButton = () => {
+function blockSubmitButton () {
   submitButton.disabled = true;
   submitButton.textContent = 'Публикую...';
-};
+}
 
-const unblockSubmitButton = () => {
+function unblockSubmitButton () {
   submitButton.disabled = false;
   submitButton.textContent = 'Опубликовать';
-};
+}
 
-// Валидация типа жилья и его цены
 function validatePrice (value) {
-  return value <= maxPrice && value >= minPrice[type.value];
+  return value <= MAX_PRICE && value >= minPrice[type.value];
 }
 
 function errorPrice () {
-  return (priceInput.value > maxPrice)
-    ? `Стоимость ${ChangeWord[type.value]} не более ${maxPrice}р`
-    : `Стоимость ${ChangeWord[type.value]} не меньше ${minPrice[type.value]}р`;
+  return (priceInput.value > MAX_PRICE)
+    ? `Стоимость ${changeWord[type.value]} не более ${MAX_PRICE}р`
+    : `Стоимость ${changeWord[type.value]} не меньше ${minPrice[type.value]}р`;
 }
 
 pristine.addValidator(priceInput,validatePrice, errorPrice);
 
-// noUiSlider
 noUiSlider.create(sliderElement, {
   range: {
     min: Number(priceInput.min),
     max: Number(priceInput.max),
   },
   start: Number(priceInput.min),
-  step: 15,
+  step: SLIDER_STEP,
   connect: 'lower'
 });
 
@@ -95,7 +94,6 @@ type.addEventListener('change', () => {
   pristine.validate();
 });
 
-// Валидация количества комнат и гостей
 rooms.addEventListener('change', () => {
   pristine.validate();
 });
@@ -110,7 +108,6 @@ function errorCapacity() {
 
 pristine.addValidator(capacity, validateCapacity, errorCapacity);
 
-// Время заезда и время выезда синхрон
 timeIn.addEventListener('change', () => {
   timeOut.value = timeIn.value;
   pristine.validate();
@@ -131,7 +128,7 @@ function errorTime () {
 
 pristine.addValidator(timeOut, validateTime, errorTime);
 
-const setUserFormSubmit = (onSuccess) => {
+function setUserFormSubmit (onSuccess) {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValidate = pristine.validate();
@@ -145,10 +142,33 @@ const setUserFormSubmit = (onSuccess) => {
       });
     }
   });
+}
+
+function successSend (cb) {
+  setUserFormSubmit(() => {
+    showSuccess(successMessage.textContent);
+    resetForm(adForm);
+    cb();
+    unblockSubmitButton();
+  });
+}
+
+function resetPage (cb) {
+  resetButton.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    pristine.reset();
+    resetForm(adForm);
+    cb();
+  });
+}
+
+export {
+  setUserFormSubmit,
+  unblockSubmitButton,
+  sliderElement,
+  priceInput,
+  minPrice,
+  type,
+  successSend,
+  resetPage
 };
-
-adForm.addEventListener('reset', () => {
-  pristine.reset();
-});
-
-export {setUserFormSubmit, unblockSubmitButton, sliderElement};
