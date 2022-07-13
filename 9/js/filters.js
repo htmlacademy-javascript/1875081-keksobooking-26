@@ -23,7 +23,7 @@ const filterType = filtersContainer.querySelector('#housing-type');
 const filterPrice = filtersContainer.querySelector('#housing-price');
 const filterRooms = filtersContainer.querySelector('#housing-rooms');
 const filterGuests = filtersContainer.querySelector('#housing-guests');
-// const filterFeatureList = filtersContainer.querySelectorAll('.map__checkbox');
+const filterFeatureList = filtersContainer.querySelectorAll('.map__checkbox');
 
 function chooseType (ad) {
   return filterType.value === DEFAULT_VALUE || ad.offer.type === filterType.value;
@@ -41,47 +41,23 @@ function chooseGuests (ad) {
   return filterGuests.value === DEFAULT_VALUE || ad.offer.guests === +filterGuests.value;
 }
 
-// function chooseFeatures (ad) {
-//   const cardFeatures = ad.offer.features;
-//   filterFeatureList.forEach((feature) => {
-//     if (cardFeatures) {
-//       if (cardFeatures.includes(feature.value)) {
-//         return true;
-//       }
-//     }
-//   });
-//   return false;
-// }
-
-// function chooseFeatures (ad) {
-//   const checked = [];
-//   filterFeatureList.forEach((feature) => {
-//     if (feature.checked) {
-//       checked.push(feature.value);
-//     }
-//   });
-
-//   if (ad.offer.features) {
-//     return ad.offer.features
-//       .every((el) => checked.includes(el));
-//   }
-// }
-
-// function chooseFeatures (ad) {
-//   for (const feature of filterFeatureList) {
-//     if (ad.includes(feature.value)) {
-//       return ad.includes(feature.value);
-//     }
-//   }
-//   return false;
-// }
-
+function chooseFeatures (ad) {
+  for (const featureElement of filterFeatureList) {
+    if (featureElement.checked) {
+      if (ad.offer.features === undefined) {
+        return false;
+      }
+      return ad.offer.features.includes(featureElement.value);
+    }
+  }
+  return true;
+}
 
 function createAds (ads) {
   const filteredCards = [];
 
   ads.forEach((ad) => {
-    if (chooseType(ad) && choosePrice(ad) && chooseRooms(ad) && chooseGuests(ad)) {
+    if (chooseType(ad) && choosePrice(ad) && chooseRooms(ad) && chooseGuests(ad) && chooseFeatures(ad)) {
       if (filteredCards.length < MAX_CARD_COUNT) {
         const card = createMarker(ad);
         filteredCards.push(card);
