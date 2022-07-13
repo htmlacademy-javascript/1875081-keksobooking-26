@@ -84,13 +84,14 @@ function onPopupEscKeydown (evt, container) {
   }
 }
 
-function onPopupClick (container) {
-  removePopup(container);
+function onPopupClick () {
+  removePopup();
 }
 
 // Удаление попапов и обработчиков событий
-function removePopup (container) {
-  container.remove();
+function removePopup () {
+  errorContainer.remove();
+  successContainer.remove();
 
   document.removeEventListener('click', onPopupClick);
 
@@ -108,9 +109,9 @@ function showError (message) {
     errorContainer.remove();
   });
 
-  document.addEventListener('click', () => onPopupClick(errorContainer));
+  document.addEventListener('click', onPopupClick);
 
-  document.addEventListener('keydown', () => onPopupEscKeydown(errorContainer));
+  document.addEventListener('keydown', onPopupEscKeydown);
 }
 
 // Cообщение об успехе
@@ -119,9 +120,9 @@ function showSuccess (message) {
 
   document.body.append(successContainer);
 
-  document.addEventListener('click', () => onPopupClick(successContainer));
+  document.addEventListener('click', onPopupClick);
 
-  document.addEventListener('keydown', () => onPopupEscKeydown(successContainer));
+  document.addEventListener('keydown', onPopupEscKeydown);
 
   setTimeout(() => {
     successContainer.remove();
