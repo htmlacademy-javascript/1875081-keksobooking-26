@@ -54,7 +54,6 @@ function unblockSubmitButton () {
   submitButton.textContent = 'Опубликовать';
 }
 
-// Валидация типа жилья и его цены
 function validatePrice (value) {
   return value <= MAX_PRICE && value >= minPrice[type.value];
 }
@@ -67,7 +66,6 @@ function errorPrice () {
 
 pristine.addValidator(priceInput,validatePrice, errorPrice);
 
-// noUiSlider
 noUiSlider.create(sliderElement, {
   range: {
     min: Number(priceInput.min),
@@ -96,7 +94,6 @@ type.addEventListener('change', () => {
   pristine.validate();
 });
 
-// Валидация количества комнат и гостей
 rooms.addEventListener('change', () => {
   pristine.validate();
 });
@@ -111,7 +108,6 @@ function errorCapacity() {
 
 pristine.addValidator(capacity, validateCapacity, errorCapacity);
 
-// Время заезда и время выезда синхрон
 timeIn.addEventListener('change', () => {
   timeOut.value = timeIn.value;
   pristine.validate();

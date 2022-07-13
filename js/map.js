@@ -5,8 +5,8 @@ const COORDS_DIGITS = 5;
 const addressInput = document.querySelector('#address');
 const map = L.map('map-canvas');
 const coordsDefault = {
-  lat: 35.68950,
-  lng: 139.69200,
+  lat: '35.68950',
+  lng: '139.69200',
 };
 
 const mainPinIcon = L.icon({

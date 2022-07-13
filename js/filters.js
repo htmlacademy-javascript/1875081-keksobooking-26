@@ -41,10 +41,10 @@ function chooseGuests (ad) {
 }
 
 function chooseFeatures (ad) {
-  const checked = Array.from(filtersContainer.querySelectorAll('input[type="checkbox"]:checked'));
+  const checkedsInputs = Array.from(filtersContainer.querySelectorAll('input[type="checkbox"]:checked'));
 
   if (ad.offer.features) {
-    return checked.every((el) => ad.offer.features.includes(el.value));
+    return checkedsInputs.every((el) => ad.offer.features.includes(el.value));
   }
 
   return false;
@@ -53,15 +53,20 @@ function chooseFeatures (ad) {
 function createAds (ads) {
   const filteredCards = [];
 
-  ads.forEach((ad) => {
-    if (chooseType(ad) && choosePrice(ad) && chooseRooms(ad) && chooseGuests(ad) && chooseFeatures(ad)) {
-      if (filteredCards.length < MAX_CARD_COUNT) {
-        const card = createMarker(ad);
-        filteredCards.push(card);
+  for (let i = 0; i < ads.length; i++) {
+    if (
+      chooseType(ads[i]) &&
+      choosePrice(ads[i]) &&
+      chooseRooms(ads[i]) &&
+      chooseGuests(ads[i]) &&
+      chooseFeatures(ads[i])) {
+      if (filteredCards.length >= MAX_CARD_COUNT) {
+        break;
       }
+      const card = createMarker(ads[i]);
+      filteredCards.push(card);
     }
-  });
-
+  }
   return filteredCards;
 }
 

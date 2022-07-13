@@ -4,8 +4,7 @@ const successMessage = successContainer.querySelector('.success__message');
 const errorContainer = document.querySelector('#error').content.querySelector('.error');
 const errorButton = errorContainer.querySelector('.error__button');
 const errorMessage = errorContainer.querySelector('.error__message');
-// Функция для генерации правильного окончания в сообщении.
-// Как ее сделать красивее и проще?
+
 function createCapacityMessage (tag, rooms, guest) {
   if (rooms === 1 && guest === 1) {
     tag.textContent = `${rooms} комната для ${guest} гостя`;
@@ -22,7 +21,6 @@ function createCapacityMessage (tag, rooms, guest) {
   }
 }
 
-// Скрыть элемент с textContent, если длина = 0
 function hiddenElement (element, data) {
   if (data) {
     element.textContent = data;
@@ -31,7 +29,6 @@ function hiddenElement (element, data) {
   }
 }
 
-// Скрыть фото c src, если длина = 0
 function hiddenPhotoElement (element, data) {
   if (data) {
     element.src = data;
@@ -40,7 +37,6 @@ function hiddenPhotoElement (element, data) {
   }
 }
 
-// Удалить элементы списка без нужных модификаторов
 function renderFeatures (container, dataFeaturesList) {
   if (dataFeaturesList) {
     container.innerHTML = '';
@@ -60,7 +56,6 @@ function renderFeatures (container, dataFeaturesList) {
   }
 }
 
-// Сделать клоны элементов с изображениями,если их не хватает
 function addPhotoSrc (photo, randomSrc, container) {
   randomSrc.forEach((value, index) => {
     if (index === 0) {
@@ -72,15 +67,15 @@ function addPhotoSrc (photo, randomSrc, container) {
     }
   });
 }
-// Находит клавишу Escape
+
 function isEscapeKey (evt) {
-  return evt.key === 'Escape';
+  return evt.key === 'Escape' || evt.key === 'Esc';
 }
 
-function onPopupEscKeydown (evt, container) {
+function onPopupEscKeydown (evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    removePopup(container);
+    removePopup();
   }
 }
 
@@ -88,7 +83,6 @@ function onPopupClick () {
   removePopup();
 }
 
-// Удаление попапов и обработчиков событий
 function removePopup () {
   errorContainer.remove();
   successContainer.remove();
@@ -98,7 +92,6 @@ function removePopup () {
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
 
-// Собщение с ошибкой
 function showError (message) {
   errorMessage.textContent = message;
 
@@ -114,7 +107,6 @@ function showError (message) {
   document.addEventListener('keydown', onPopupEscKeydown);
 }
 
-// Cообщение об успехе
 function showSuccess (message) {
   successMessage.textContent = message;
 
@@ -129,7 +121,6 @@ function showSuccess (message) {
   }, SHOW_TIME);
 }
 
-// Функция debounce для устранения дребезга
 function debounce (callback, timeoutDelay = 500) {
   let timeoutId;
 
