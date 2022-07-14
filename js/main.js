@@ -1,6 +1,6 @@
 import { showError, debounce } from './util.js';
 import { activateForm } from './form-activate.js';
-import { resetPage, successSend } from './form-validate.js';
+import { resetPage, resetPageSuccess } from './form-validate.js';
 import { createMap } from './map.js';
 import { getData } from './api.js';
 import { createAds, renderPinOnMap } from './filters.js';
@@ -15,7 +15,7 @@ getData((cards) => {
   createAds(cards);
   renderPinOnMap(debounce(() => createAds(cards), RERENDER_DELAY));
   resetPage(debounce(() => createAds(cards), RERENDER_DELAY));
-  successSend(debounce(() => createAds(cards), RERENDER_DELAY));
+  resetPageSuccess(debounce(() => createAds(cards), RERENDER_DELAY));
 }, showError);
 
 uploadFileAvatar();

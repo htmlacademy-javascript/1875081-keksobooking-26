@@ -24,23 +24,12 @@ const filterPrice = filtersContainer.querySelector('#housing-price');
 const filterRooms = filtersContainer.querySelector('#housing-rooms');
 const filterGuests = filtersContainer.querySelector('#housing-guests');
 
-function chooseType (ad) {
-  return filterType.value === DEFAULT_VALUE || ad.offer.type === filterType.value;
-}
+const chooseType = (ad) => filterType.value === DEFAULT_VALUE || ad.offer.type === filterType.value;
+const choosePrice = (ad) => filterPrice.value === DEFAULT_VALUE || (ad.offer.price >= priceForFilter[filterPrice.value].min && ad.offer.price <= priceForFilter[filterPrice.value].max);
+const chooseRooms = (ad) => filterRooms.value === DEFAULT_VALUE || ad.offer.rooms === +filterRooms.value;
+const chooseGuests = (ad) => filterGuests.value === DEFAULT_VALUE || ad.offer.guests === +filterGuests.value;
 
-function choosePrice (ad) {
-  return filterPrice.value === DEFAULT_VALUE || (ad.offer.price >= priceForFilter[filterPrice.value].min && ad.offer.price <= priceForFilter[filterPrice.value].max);
-}
-
-function chooseRooms (ad) {
-  return filterRooms.value === DEFAULT_VALUE || ad.offer.rooms === +filterRooms.value;
-}
-
-function chooseGuests (ad) {
-  return filterGuests.value === DEFAULT_VALUE || ad.offer.guests === +filterGuests.value;
-}
-
-function chooseFeatures (ad) {
+const chooseFeatures = (ad) => {
   const checkedsInputs = Array.from(filtersContainer.querySelectorAll('input[type="checkbox"]:checked'));
 
   if (ad.offer.features) {
@@ -48,9 +37,9 @@ function chooseFeatures (ad) {
   }
 
   return false;
-}
+};
 
-function createAds (ads) {
+const createAds = (ads) => {
   const filteredCards = [];
 
   for (let i = 0; i < ads.length; i++) {
@@ -68,15 +57,15 @@ function createAds (ads) {
     }
   }
   return filteredCards;
-}
+};
 
 
-function renderPinOnMap (cb) {
+const renderPinOnMap = (cb) => {
   filtersContainer.addEventListener('change', () => {
     clearMarkers();
     cb();
   });
-}
+};
 
 export {
   createAds,

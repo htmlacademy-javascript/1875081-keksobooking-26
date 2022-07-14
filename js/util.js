@@ -5,7 +5,7 @@ const errorContainer = document.querySelector('#error').content.querySelector('.
 const errorButton = errorContainer.querySelector('.error__button');
 const errorMessage = errorContainer.querySelector('.error__message');
 
-function createCapacityMessage (tag, rooms, guest) {
+const createCapacityMessage = (tag, rooms, guest) => {
   if (rooms === 1 && guest === 1) {
     tag.textContent = `${rooms} комната для ${guest} гостя`;
   } else if (rooms === 1 && guest === 2) {
@@ -19,25 +19,25 @@ function createCapacityMessage (tag, rooms, guest) {
   } else if (rooms >=5  && guest >= 2) {
     tag.textContent = `${rooms} комнат для ${guest} гостей`;
   }
-}
+};
 
-function hiddenElement (element, data) {
+const hideElement = (element, data) => {
   if (data) {
     element.textContent = data;
   } else {
     element.classList.add('hidden');
   }
-}
+};
 
-function hiddenPhotoElement (element, data) {
+const hidePhotoElement = (element, data) => {
   if (data) {
     element.src = data;
   } else {
     element.classList.add('hidden');
   }
-}
+};
 
-function renderFeatures (container, dataFeaturesList) {
+const renderFeatures = (container, dataFeaturesList) => {
   if (dataFeaturesList) {
     container.innerHTML = '';
 
@@ -54,9 +54,9 @@ function renderFeatures (container, dataFeaturesList) {
   } else {
     container.remove();
   }
-}
+};
 
-function addPhotoSrc (photo, randomSrc, container) {
+const addPhotoSrc = (photo, randomSrc, container) => {
   randomSrc.forEach((value, index) => {
     if (index === 0) {
       photo.src = value;
@@ -66,22 +66,20 @@ function addPhotoSrc (photo, randomSrc, container) {
       container.append(photoClone);
     }
   });
-}
+};
 
-function isEscapeKey (evt) {
-  return evt.key === 'Escape' || evt.key === 'Esc';
-}
+const isEscapeKey = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
 
-function onPopupEscKeydown (evt) {
+const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     removePopup();
   }
-}
+};
 
-function onPopupClick () {
+const onPopupClick = () => {
   removePopup();
-}
+};
 
 function removePopup () {
   errorContainer.remove();
@@ -92,7 +90,7 @@ function removePopup () {
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
 
-function showError (message) {
+const showError = (message) => {
   errorMessage.textContent = message;
 
   document.body.append(errorContainer);
@@ -105,9 +103,9 @@ function showError (message) {
   document.addEventListener('click', onPopupClick);
 
   document.addEventListener('keydown', onPopupEscKeydown);
-}
+};
 
-function showSuccess (message) {
+const showSuccess = (message) => {
   successMessage.textContent = message;
 
   document.body.append(successContainer);
@@ -119,21 +117,21 @@ function showSuccess (message) {
   setTimeout(() => {
     successContainer.remove();
   }, SHOW_TIME);
-}
+};
 
-function debounce (callback, timeoutDelay = 500) {
+const debounce = (callback, timeoutDelay = 500) => {
   let timeoutId;
 
   return (...rest) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
-}
+};
 
 export {
   createCapacityMessage,
-  hiddenElement,
-  hiddenPhotoElement,
+  hideElement,
+  hidePhotoElement,
   renderFeatures,
   addPhotoSrc,
   showError,

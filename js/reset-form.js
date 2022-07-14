@@ -5,7 +5,7 @@ import { clearMarkers, coordsDefault, mainPinMarker, map, setAdress, ZOOM_DEFAUL
 const AVATAR_DEFAULT = 'img/muffin-grey.svg';
 const filtersForm = document.querySelector('.map__filters');
 
-function resetForm (form) {
+const resetForm = (form) => {
   filtersForm.reset();
   form.reset();
   setAdress(coordsDefault.lat, coordsDefault.lng);
@@ -24,7 +24,7 @@ function resetForm (form) {
     ZOOM_DEFAULT
   );
   clearMarkers();
-}
+};
 
 export {
   resetForm
