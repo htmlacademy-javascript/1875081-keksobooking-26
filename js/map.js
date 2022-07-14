@@ -40,6 +40,12 @@ L.tileLayer(
 
 mainPinMarker.addTo(map);
 
+const setAdress = (lat, lng) =>{
+  const addressLat = lat;
+  const addressLng = lng;
+  addressInput.value =  `Широта: ${addressLat}, долгота: ${addressLng}`;
+};
+
 mainPinMarker.on('move', (evt) => {
   setAdress(
     evt.target.getLatLng().lat.toFixed(COORDS_DIGITS),
@@ -47,13 +53,7 @@ mainPinMarker.on('move', (evt) => {
   );
 });
 
-function setAdress (lat, lng) {
-  const addressLat = lat;
-  const addressLng = lng;
-  addressInput.value =  `Широта: ${addressLat}, долгота: ${addressLng}`;
-}
-
-function createMap (form) {
+const createMap = (form) => {
   map
     .on('load', () => {
       form(true);
@@ -63,9 +63,9 @@ function createMap (form) {
       coordsDefault,
       ZOOM_DEFAULT
     );
-}
+};
 
-function createMarker (card) {
+const createMarker = (card) => {
   const marker = L.marker({
     lat: card.location.lat,
     lng: card.location.lng,
@@ -77,11 +77,11 @@ function createMarker (card) {
   marker
     .addTo(markerGroup)
     .bindPopup(showCard(card));
-}
+};
 
-function clearMarkers () {
+const clearMarkers = () => {
   markerGroup.clearLayers();
-}
+};
 
 export {
   ZOOM_DEFAULT,

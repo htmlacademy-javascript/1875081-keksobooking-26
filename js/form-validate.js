@@ -44,27 +44,23 @@ const pristine = new Pristine(adForm, {
   errorTextClass: 'ad-form__error-text',
 });
 
-function blockSubmitButton () {
+const blockSubmitButton = () => {
   submitButton.disabled = true;
   submitButton.textContent = 'Публикую...';
-}
+};
 
-function unblockSubmitButton () {
+const unblockSubmitButton = () => {
   submitButton.disabled = false;
   submitButton.textContent = 'Опубликовать';
-}
+};
 
-function validatePrice (value) {
-  return value <= MAX_PRICE && value >= minPrice[type.value];
-}
+const validatePrice = (value) => value <= MAX_PRICE && value >= minPrice[type.value];
 
-function errorPrice () {
-  return (priceInput.value > MAX_PRICE)
-    ? `Стоимость ${changeWord[type.value]} не более ${MAX_PRICE}р`
-    : `Стоимость ${changeWord[type.value]} не меньше ${minPrice[type.value]}р`;
-}
+const showErrorPrice = () => (priceInput.value > MAX_PRICE)
+  ? `Стоимость ${changeWord[type.value]} не более ${MAX_PRICE}р`
+  : `Стоимость ${changeWord[type.value]} не меньше ${minPrice[type.value]}р`;
 
-pristine.addValidator(priceInput,validatePrice, errorPrice);
+pristine.addValidator(priceInput,validatePrice, showErrorPrice);
 
 noUiSlider.create(sliderElement, {
   range: {
@@ -98,15 +94,11 @@ rooms.addEventListener('change', () => {
   pristine.validate();
 });
 
-function validateCapacity () {
-  return maxCapacity[+rooms.value].includes(+capacity.value);
-}
+const validateCapacity = () => maxCapacity[+rooms.value].includes(+capacity.value);
 
-function errorCapacity() {
-  return 'Количество мест не соответствует типу жилья';
-}
+const showErrorCapacity= () =>'Количество мест не соответствует типу жилья';
 
-pristine.addValidator(capacity, validateCapacity, errorCapacity);
+pristine.addValidator(capacity, validateCapacity, showErrorCapacity);
 
 timeIn.addEventListener('change', () => {
   timeOut.value = timeIn.value;
@@ -118,17 +110,13 @@ timeOut.addEventListener('change', () => {
   pristine.validate();
 });
 
-function validateTime () {
-  return  timeIn.value === timeOut.value;
-}
+const validateTime = () =>  timeIn.value === timeOut.value;
 
-function errorTime () {
-  return 'Время должно быть одинаково';
-}
+const showErrorTime = () => 'Время должно быть одинаково';
 
-pristine.addValidator(timeOut, validateTime, errorTime);
+pristine.addValidator(timeOut, validateTime, showErrorTime);
 
-function setUserFormSubmit (onSuccess) {
+const setUserFormSubmit = (onSuccess) => {
   adForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     const isValidate = pristine.validate();
@@ -142,25 +130,25 @@ function setUserFormSubmit (onSuccess) {
       });
     }
   });
-}
+};
 
-function successSend (cb) {
+const resetPageSuccess = (cb) => {
   setUserFormSubmit(() => {
     showSuccess(successMessage.textContent);
     resetForm(adForm);
     cb();
     unblockSubmitButton();
   });
-}
+};
 
-function resetPage (cb) {
+const resetPage = (cb) => {
   resetButton.addEventListener('click', (evt) => {
     evt.preventDefault();
     pristine.reset();
     resetForm(adForm);
     cb();
   });
-}
+};
 
 export {
   setUserFormSubmit,
@@ -169,6 +157,6 @@ export {
   priceInput,
   minPrice,
   type,
-  successSend,
+  resetPageSuccess,
   resetPage
 };
